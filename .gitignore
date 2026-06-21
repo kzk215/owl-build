@@ -6,7 +6,7 @@
 .bk/
 .dist/
 prepros-6.config
-.env-local
+.env
 
 node_modules/
 package-lock.json
