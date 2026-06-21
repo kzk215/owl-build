@@ -71,8 +71,8 @@ async function run() {
 
   try {
     const configFiles = [
-      'bin',
       '_scripts',
+      'paths.mjs',
       '.gitignore',
       '.stylelintrc.cjs',
       'package.json',
@@ -88,9 +88,10 @@ async function run() {
       for (const file of configFiles) {
         const localPath = path.join(projectRoot, file);
         const destPath = path.join(rootDir, file);
+        
         if (localPath !== destPath && fs.existsSync(localPath)) {
           copyRecursiveSync(localPath, destPath);
-          console.log(`[Local] Copied ${file} to root`);
+          console.log(`[Local] Copied ${file} to ${path.relative(rootDir, destPath)}`);
         }
       }
       
@@ -102,8 +103,17 @@ async function run() {
         if (fs.existsSync(srcPath)) {
           const destName = (file === '.env-template') ? '.env' : file;
           const destPath = path.join(rootDir, destName);
-          fs.copyFileSync(srcPath, destPath);
-          console.log(`[Local] Copied ${file} to root as ${destName}`);
+          
+          if (file === '.env-template') {
+            // .env-template を読み込んで THEME_NAME を自動設定
+            let envContent = fs.readFileSync(srcPath, 'utf8');
+            envContent = envContent.replace(/THEME_NAME=.*/, `THEME_NAME=${themeName}`);
+            fs.writeFileSync(destPath, envContent);
+            console.log(`[Local] Created .env and set THEME_NAME=${themeName}`);
+          } else {
+            fs.copyFileSync(srcPath, destPath);
+            console.log(`[Local] Copied ${file} to root`);
+          }
         }
       }
 
@@ -130,9 +140,10 @@ async function run() {
         for (const file of configFiles) {
           const srcPath = path.join(tempDir, file);
           const destPath = path.join(rootDir, file);
+
           if (fs.existsSync(srcPath)) {
             copyRecursiveSync(srcPath, destPath);
-            console.log(`[Remote] Copied ${file} to root`);
+            console.log(`[Remote] Copied ${file} to ${path.relative(rootDir, destPath)}`);
           }
         }
 
@@ -144,8 +155,17 @@ async function run() {
           if (fs.existsSync(srcPath)) {
             const destName = (file === '.env-template') ? '.env' : file;
             const destPath = path.join(rootDir, destName);
-            fs.copyFileSync(srcPath, destPath);
-            console.log(`[Remote] Copied ${file} to root as ${destName}`);
+            
+            if (file === '.env-template') {
+              // .env-template を読み込んで THEME_NAME を自動設定
+              let envContent = fs.readFileSync(srcPath, 'utf8');
+              envContent = envContent.replace(/THEME_NAME=.*/, `THEME_NAME=${themeName}`);
+              fs.writeFileSync(destPath, envContent);
+              console.log(`[Remote] Created .env and set THEME_NAME=${themeName}`);
+            } else {
+              fs.copyFileSync(srcPath, destPath);
+              console.log(`[Remote] Copied ${file} to root`);
+            }
           }
         }
 

@@ -13,7 +13,7 @@
     "lint-scss": "node _scripts/lint-scss.mjs"
   },
   "bin": {
-    "owl-build": "./bin/owl-build.mjs"
+    "owl-build": "./_scripts/owl-build.mjs"
   },
   "type": "module",
   "devDependencies": {
