@@ -1,0 +1,403 @@
+@charset "UTF-8";
+%mixin_module_manual {
+  /*
+    ------------------------------------
+    ####################################
+     mixin_module
+
+     ※ Mixin用共通モジュール
+    ####################################
+    ------------------------------------
+  */
+}
+
+@mixin reset {
+  html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,
+  figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+  }
+  /*  HTML5 display-role reset for older browsers */
+  article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+  }
+  body {
+    line-height: 1;
+  }
+  ol, ul {
+    list-style: none;
+  }
+  blockquote, q {
+    quotes: none;
+  }
+  blockquote:before, blockquote:after,
+  q:before, q:after {
+    content: none;
+  }
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  /* clearfix */
+  .clearfix {
+    overflow: hidden;
+  }
+  .clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+  * html .clearfix {
+    zoom: 1;
+  }
+
+  *:first-child + html .clearfix {
+    zoom: 1;
+  }
+}
+
+@mixin form-reset {
+  input,
+  button,
+  textarea,
+  select {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    outline: none;
+		font: initial;
+    font-weight: normal;
+    font-size: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  ::placeholder {
+    color: #B7AFA3;
+  }
+
+  select::-ms-expand {
+    display: none;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+    display: none;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+    display: none;
+
+    & + label {
+      cursor: pointer;
+    }
+  }
+}
+
+@mixin flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+@mixin flex-child($child-sell) {
+  width: calc(100% / #{$child-sell});
+}
+
+// grid簡易設定必ずcss側でgrid-template-areasを設定すること
+@mixin grid($columns,$rows,$gap:0) {
+  display: grid;
+  grid-template-rows: repeat($rows, 1fr);
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+@mixin grid-child($maxLength,$itemName:cell) {
+  & > * {
+    @for $i from 1 through $maxLength {
+      &:nth-child(#{$i}) {
+        grid-area: #{$itemName}#{$i};
+      }
+    }
+  }
+}
+
+//FLEX COlUMN
+@mixin column($width,$align:normal,$order:NULL) {
+  @include flex;
+  justify-content: space-between;
+  align-items: $align;
+  img {
+    width: 100%;
+    display: block;
+  }
+  & > * {
+    display: block;
+    width: $width;
+
+
+    @if $order != NULL {
+      &:first-child {
+        order: $order;
+      }
+    }
+  }
+  &:before, &:after {
+    order: 10;
+    content: "";
+    display: block;
+    width: $width;
+  }
+}
+
+@mixin column_side($width,$align:normal,$order:NULL) {
+  @include flex;
+  justify-content: space-between;
+  align-items: $align;
+
+  img {
+    width: 100%;
+    display: block;
+  }
+
+  dt {
+    width: $width;
+  }
+
+  dd {
+    width: calc(100% - #{$width});
+  }
+  & > * {
+    @if $order != NULL {
+      &:first-child {
+        order: $order;
+      }
+    }
+  }
+
+
+}
+
+@mixin box-sizing($type:border-box) {
+  -webkit-box-sizing: $type;
+  box-sizing: $type;
+}
+
+// transform各種
+@mixin transform($transforms) {
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+
+// rotate
+@mixin rotate($deg-x:0,$deg-y:0) {
+  @include transform(rotate(#{$deg-x}deg));
+}
+
+// scale
+@mixin scale($scale) {
+  @include transform(scale($scale));
+}
+
+// translate
+@mixin translate($x, $y) {
+  @include transform(translate($x, $y));
+}
+
+// skew
+@mixin skew($x, $y) {
+  @include transform(skew(#{$x}deg, #{$y}deg));
+}
+
+//transform origin
+@mixin transform-origin($origin) {
+  transform-origin: $origin;
+}
+
+// 縦横中央揃え
+@mixin trans-xy($deg:0,$scale:1) {
+  top: 50%;
+  left: 50%;
+  @include transform(translate3d(-50%, -50%, 0) rotate(#{$deg}deg) scale($scale));
+}
+
+// 横中央揃え
+@mixin trans-x($deg:0,$scale:1) {
+  left: 50%;
+  transform: translate3d(-50%, 0, 0) rotate(#{$deg}deg) scale($scale);
+}
+
+// 縦中央揃え
+@mixin trans-y($deg:0,$scale:1) {
+  top: 50%;
+  transform: translate3d(0, -50%, 0) rotate(#{$deg}deg) scale($scale);
+}
+
+//斜めストライプ
+@mixin stripe($stripe-color1,$stripe-color2,$stripe-size:14px) {
+  background-image: linear-gradient(-45deg, $stripe-color1 25%, $stripe-color2 25%, $stripe-color2 50%, $stripe-color1 50%, $stripe-color1 75%, $stripe-color2 75%, $stripe-color2);
+  /* 幅8px、高さ8pxで背景画像のサイズを指定 */
+  background-size: $stripe-size $stripe-size;
+}
+
+@mixin stripe_val($base_color:#d45d5a,$stripe_color:#d86e6b,$rotate:-45,$base_size:4px,$stripe_size:2px) {
+  background: repeating-linear-gradient(
+      $rotate + deg,
+      $base_color,
+      $base_color $base_size,
+      $stripe_color $base_size,
+      $stripe_color $base_size + $stripe_size
+  );
+}
+
+@mixin dotted($bgcolor,$color,$position:10,$size:20) {
+  background-color: $bgcolor;
+  background-image: radial-gradient($color 20%, transparent 0), radial-gradient($color 20%, transparent 0);
+  background-position: 0 0, $position + px $position + px;
+  background-size: $size + px $size + px;
+}
+
+//円
+@mixin circle($size:10px) {
+  width: $size;
+  height: $size;
+  border-radius: 100%;
+}
+
+//四角形
+@mixin square($width,$height,$color:null) {
+  width: $width;
+  height: $height;
+  background: $color;
+}
+
+//ARROW
+@mixin arrow($direction: right, $size: 10, $color: #333) {
+  $set: left;
+  @if $direction == left {
+    $set: right;
+  } @else if $direction == top {
+    $set: bottom;
+  } @else if $direction == bottom {
+    $set: top;
+  } @else {
+    $set: left;
+  }
+  $size: round($size / 2);
+  width: 0;
+  height: 0;
+  border: $size + px solid transparent;
+  border-#{$set}-color: $color;
+}
+
+@mixin arrow-per($direction: right, $size: 10, $color: #333) {
+  $set: left;
+  @if $direction == left {
+    $set: right;
+  } @else if $direction == top {
+    $set: bottom;
+  } @else if $direction == bottom {
+    $set: top;
+  } @else {
+    $set: left;
+  }
+  $size: round($size / 2);
+  width: 0;
+  height: 0;
+  border: $size + em solid transparent;
+  border-#{$set}-color: $color;
+}
+
+
+//正三角形
+@mixin triangle($direction: right, $size: 10, $color: #333) {
+  $set: left;
+  @if $direction == left {
+    $set: right;
+  } @else if $direction == top {
+    $set: bottom;
+  } @else if $direction == bottom {
+    $set: top;
+  } @else {
+    $set: left;
+  }
+  $size: round($size / 2);
+  $rootSize: $size * 1.732;
+  width: 0;
+  height: 0;
+  border: $size + px solid transparent;
+  border-#{$set}: solid $color $rootSize + px;
+}
+
+@mixin content($width: 20px,$height: 20px,$bg: null) {
+  content: "";
+  position: absolute;
+  background: $bg;
+  width: $width;
+  height: $height;
+}
+
+@mixin trans-none {
+  -webkit-transform: none;
+  transform: none;
+  top: inherit;
+  left: inherit;
+}
+
+// グラデーション
+@mixin bg-gradient($rad: 180, $color: #0bd, $amount: 20%) {
+  background: linear-gradient($rad + deg, $color, adjust-hue($color, $amount)) fixed;
+}
+
+@mixin bg-grad-mlt($rad: 180, $color1: #0bd, $color2 : #0bd) {
+  background: linear-gradient($rad + deg, $color1 0%, $color2 100%);
+}
+
+@mixin box-shadow($under:0, $left:0 ,$blur:5px, $opacity:0.25 ,$color:#000) {
+  box-shadow: $under $left $blur 0 rgba($color, $opacity);
+}
+@mixin drop-shadow($under:0, $left:0 ,$blur:5px, $opacity:0.25 ,$color:#000) {
+  filter: drop-shadow($under $left $blur rgba($color, $opacity));
+}
+
+
+@mixin animationValue( $name, $duration, $function, $delay, $count, $state) {
+  animation: $name $duration+s $function $delay+s $count $state;
+}
+
+@mixin keyframes($name) {
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+@mixin gap($gap:0px, $item:1) {
+  width: calc((100% / #{$item}) - ((#{$gap} * (#{$item} - 1)) / #{$item}));
+}
+// CSSハック
+// IE11
+@mixin hack-ie11 {
+  @at-root {
+    @media all and (-ms-high-contrast: none) {
+      *::-ms-backdrop, & {
+        @content;
+      }
+    }
+  }
+}
+

@@ -1,0 +1,58 @@
+@use "../_global/00-index" as *;
+
+.c-pager {
+	margin-top: 60px;
+	@include flex;
+	justify-content: center;
+	align-items: center;
+	gap: 5px 13px;
+	color: $primary_color;
+	@include mqd($md-lg){
+		gap: 5px 5px;
+		margin-top: 40px;
+	}
+
+	&__link, &__prev, &__next {
+		width: 36px;
+		height: 36px;
+		background: #F8FBFE;
+		@include flex;
+		justify-content: center;
+		align-items: center;
+		@include web-font02;
+		font-size: 1.6rem;
+		border: #DDECFF 1px solid;
+		border-radius: 3px;
+		color: $primary_color;
+		position: relative;
+		@include mqd($md){
+			font-size: 1.5rem;
+			width: 34px;
+			height: 34px;
+		}
+	}
+
+	&__link.is-current {
+		background: $primary_color;
+		color: $white;
+
+	}
+
+	&__prev, &__next {
+		&:after {
+			@include content(100%, 100%);
+
+		}
+	}
+
+	&__prev:after {
+		@include icon(arrow_sm, $primary_color, .45em);
+		@include trans-xy(180);
+	}
+
+	&__next:after {
+		@include icon(arrow_sm, $primary_color, .45em);
+		@include trans-xy();
+	}
+
+}

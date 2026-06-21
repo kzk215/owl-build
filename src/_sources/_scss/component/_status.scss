@@ -1,0 +1,36 @@
+
+@use "../_global/00-index" as *;
+
+.c-status {
+	&:before{
+		margin-right: .5em;
+	}
+	&.--excellent{
+		&:before{
+			content: '◎';
+			color: $red;
+		}
+
+	}
+	&.--good{
+		&:before{
+			content: '〇';
+			color: $red;
+		}
+
+	}
+	&.--fair{
+		&:before{
+			content: '△';
+			color: $green;
+		}
+
+	}
+	&.--bad{
+		&:before{
+			content: '×';
+			color: #898787;
+		}
+
+	}
+}

@@ -1,0 +1,14 @@
+@keyframes toggle {
+	from {
+		position: relative;
+		transform: translateY(-20px);
+		opacity: 0;
+		visibility: hidden;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+		top: 0;
+		visibility: visible;
+	}
+}

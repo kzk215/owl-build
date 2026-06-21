@@ -1,0 +1,4 @@
+@mixin shadow($under:5px, $left:5px ,$blur:8px, $opacity:0.1 ,$color:#000) {
+	// #92C3FF
+	filter: drop-shadow($under $left $blur rgba($color, $opacity));
+}

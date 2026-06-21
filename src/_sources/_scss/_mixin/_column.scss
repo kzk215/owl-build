@@ -1,0 +1,55 @@
+//FLEX COlUMN
+@mixin column($width,$align:normal,$order:NULL) {
+	@include flex;
+	justify-content: space-between;
+	align-items: $align;
+	img {
+		width: 100%;
+		display: block;
+	}
+	& > * {
+		display: block;
+		width: $width;
+
+
+		@if $order != NULL {
+			&:first-child {
+				order: $order;
+			}
+		}
+	}
+	&:before, &:after {
+		order: 10;
+		content: "";
+		display: block;
+		width: $width;
+	}
+}
+
+@mixin column_side($width,$align:normal,$order:NULL) {
+	@include flex;
+	justify-content: space-between;
+	align-items: $align;
+
+	img {
+		width: 100%;
+		display: block;
+	}
+
+	dt {
+		width: $width;
+	}
+
+	dd {
+		width: calc(100% - #{$width});
+	}
+	& > * {
+		@if $order != NULL {
+			&:first-child {
+				order: $order;
+			}
+		}
+	}
+
+
+}

@@ -1,0 +1,7 @@
+@use "../../_global/00-index" as *;
+.c-checkbox {
+	@include e-checkbox(#484848,$border-color,$white,3px);
+	& + label:after{
+		//border-radius: 2px;
+	}
+}

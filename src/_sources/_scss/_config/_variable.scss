@@ -1,0 +1,92 @@
+//  ####################################
+//   option_module
+//   ※ projectの基本設定
+//  ####################################
+
+
+//  ------------------------------------
+//   MediaScreen指定
+//  ------------------------------------
+$xl: 1920px;
+$lg: 1200px;
+$md-lg: 920px;
+$md: 768px;
+$sm: 500px;
+$xs: 380px;
+
+//  ------------------------------------
+//   CSSからのIMGロード
+//  ------------------------------------
+$dir : "../../assets/img";
+
+
+//  ------------------------------------
+//   ベースプロパティ
+//  ------------------------------------
+
+$black: #343434;
+$dark-gray: #777777;
+$gray: #8090AC;
+$light-gray: #D6E3F4;
+$bg-gray: #eee;
+
+$green: #16A265;
+$orange: #FAB14D;
+$brown: #5C3700;
+$yellow: #FAF34D;
+$pink: #ED89BF;
+$lime-green: #56CBBD;
+$ocher: #C98B00;
+$purple: #B67CE2;
+$light-green: #89F0BD;
+$blue: #2D83E2;
+$light-blue: #04ACE9;
+$dark-blue: #093f7a;
+$magenta:#E04B73;
+$sand: #F0E9DC;
+$red: #D64B57;
+$white: #fff;
+
+$font-color: $black;
+$border-color: #D8EBFD;
+$border-gray:#9A9A9A;
+$border-gray2: #c4c4c4;
+
+$primary_color: $blue;
+$secondary_color: $light-blue;
+$accent_color: $red;
+$sub_color: $blue;
+
+$bg-color0:#F2F6F9;
+$bg-color1:#EEF5FE;
+$bg-color2:#FCF3ED;
+$bg-color3:#333333;
+$bg-color4:#222;
+
+$white2: #f2f2f2;
+$font-gray: $dark-gray;
+$gray-light: #AAAAAA;
+
+$gray-base: #F7F7F7;
+$base-gray:$gray-base;
+$base-black:#2e2e2e;
+$shadow-color:#92C3FF;
+
+$font-color: $black;
+$line-height: 1.6;
+$a-color: #666;
+$basefont: 16px;
+
+
+//  ------------------------------------
+//   FORM設定
+//  ------------------------------------
+
+//RadioBox円形サイズ
+
+$radioSize: 14px;
+$radioSizeSmall: $radioSize - 4px;
+$formItemsColor: $secondary_color;
+$inputBorder: $secondary_color;
+$selectArrowColor: $secondary_color;
+

@@ -1,0 +1,58 @@
+@use "../_global/00-index" as *;
+.c-zoomPicture{
+  display: block;
+  position: relative;
+  //pointer-events: none;
+  border-radius: 10px;
+  overflow: hidden;
+  &.--pc{
+    pointer-events: inherit;
+
+  }
+
+  @include mqd($md){
+
+    pointer-events: initial;
+    //padding: 20px;
+    border-radius: 5px;
+    transition: opacity .3s;
+
+
+    &:before{
+      @include content(100%,100%,rgba($black,.7));
+      border-radius: 5px;
+      top:0;
+      left: 0;
+      transition: opacity .3s;
+    }
+    &:after{
+      @include content(65vw,10vw);
+      @include trans-xy();
+      background: url(#{$dir}/tap.png) center center no-repeat;
+      background-size: contain;
+      transition: opacity .3s;
+    }
+    &:hover{
+      opacity: 1;
+      img{
+        opacity: 1;
+      }
+    }
+    &.is-active:before,&.is-active:after{
+      opacity: 0;
+    }
+  }
+  &__img{
+    width: 100%;
+    display: block;
+  }
+
+  &.--pc:before{
+    @include content(60px,25px);
+    background: #424242 url(#{$dir}/ico-zoom.png) center center no-repeat;
+    background-size: 40px;
+    right: 0;
+    z-index: 100;
+    bottom:0;
+  }
+}

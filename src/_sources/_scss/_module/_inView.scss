@@ -1,0 +1,69 @@
+@use "../_global/00-index" as *;
+/* CSS Document */
+
+@mixin inViewMove(){
+	&.--left{
+		transform: translate3d(-15%,0,0);
+	}
+	&.--right{
+		transform: translate3d(15%,0,0);
+	}
+	&.--top{
+		transform: translate3d(0,-20px,0);
+	}
+	&.--bottom{
+		transform: translate3d(0,20px,0);
+	}
+	&.--rt{
+		transform: translate3d(50px,-50px,0);
+	}
+	&.--rb{
+		transform: translate3d(50px,50px,0);
+	}
+	&.--lt{
+		transform: translate3d(-50px,-50px,0);
+	}
+	&.--lb{
+		transform: translate3d(-50px,50px,0);
+	}
+}
+.m-inView {
+	opacity: 0;
+	transition:.6s cubic-bezier(.4, 0, .2, 1);
+	transition-property:transform,opacity,visibility;
+
+	@include inViewMove;
+
+	&.js-inView {
+		opacity: 1;
+		transform: translate3d(0,0,0);
+	}
+
+	&__move{
+		opacity: 1;
+		@include inViewMove;
+		.js-inView {
+			transform: translate3d(0,0,0);
+		}
+	}
+
+	&__scale{
+		transform: scale(.3);
+		&.js-inView{
+			transform: scale(1.0);
+		}
+	}
+}
+
+.delay2sec{
+	transition: all 2s cubic-bezier(.4, 0, .2, 1);
+	animation: all 2s cubic-bezier(.4, 0, .2, 1);
+}
+.delay4sec{
+	transition: all 4s cubic-bezier(.4, 0, .2, 1);
+	animation: all 4s cubic-bezier(.4, 0, .2, 1);
+}
+.delay6sec{
+	transition: all 6s cubic-bezier(.4, 0, .2, 1);
+	animation: all 6s cubic-bezier(.4, 0, .2, 1);
+}

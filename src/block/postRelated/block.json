@@ -1,0 +1,19 @@
+{
+    "name": "acf/postRelated",
+    "title": "コラム関連記事ブロック",
+    "description": "関連記事を表示するブロック",
+    "category": "hp-original",
+    "icon": "admin-links",
+    "keywords": ["related", "post"],
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "render.php"
+    },
+    "supports": {
+        "align": true,
+        "mode": false,
+        "jsx": true,
+        "multiple": true
+    },
+    "postTypes": ["column", "post", "page"]
+}

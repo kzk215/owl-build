@@ -1,0 +1,37 @@
+@use "../../_global/00-index" as *;
+
+.c-titleCenter {
+	text-align: center;
+	width: fit-content;
+	margin: 0 auto;
+	position: relative;
+	padding-bottom: 10px;
+	margin-bottom: 4rem;
+	@include mqd($md){}
+	&:before{
+		@include content(50px,2px,$primary_color);
+		@include trans-x();
+		top: 100%;
+	}
+
+	&__text{
+		width: fit-content;
+		font-weight: 500;
+		font-size: 3.6rem;
+		line-height: 1.4;
+		margin-bottom: .2em;
+		letter-spacing: .1em;
+		@include mqd($md){
+			font-size: 3.0rem;
+		}
+	}
+	&__subTitle{
+		font-size: 1.8rem;
+		letter-spacing: .1em;
+		color: $primary_color;
+		font-weight: 500;
+		@include mqd($md){
+			font-size: 1.6rem;
+		}
+	}
+}

@@ -1,0 +1,15 @@
+//  ------------------------------------
+//   Responsive指定
+//  ------------------------------------
+
+@mixin mqd($breakPoint) {
+	@media screen and (max-width: $breakPoint) {
+		@content;
+	}
+}
+
+@mixin mqu($breakPoint) {
+	@media screen and (min-width: $breakPoint + 1px) {
+		@content;
+	}
+}

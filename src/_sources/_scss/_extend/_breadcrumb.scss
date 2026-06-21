@@ -1,0 +1,18 @@
+@mixin e-breadcrumb (){
+	display: flex;
+	flex-wrap: wrap;
+	gap: 3em;
+	font-size: .8em;
+
+	& > *{
+		position: relative;
+		&:after{
+			position: absolute;
+			left: calc(100% + 1em);
+			content:'/';
+		}
+		&:last-child:after{
+			content: none;
+		}
+	}
+}

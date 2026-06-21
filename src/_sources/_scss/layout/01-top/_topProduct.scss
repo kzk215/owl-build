@@ -1,0 +1,56 @@
+@use "../../_global/00-index" as *;
+.l-topProduct {
+	position: relative;
+	padding: 80px 0;
+	text-align: center;
+	color: $white;
+	background: $primary_color;
+	@include mqd($md){
+		padding: 60px 0 40px;
+	}
+	&__list{
+		display: flex;
+		gap: 0;
+		margin-top: 40px;
+		@include mqd($md){
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+	}
+
+	&__itemWrap{
+		padding: 5px 20px;
+		border-right: 1px solid #88BAF1;
+		@include gap(0px,5);
+		@include mqd($md){
+			@include gap(10px,2);
+			padding: 0;
+			border: none !important;
+		}
+
+		&:first-child{
+			border-left: 1px solid #88BAF1;
+		}
+	}
+	&__item{
+		display: block;
+		&.is-hidden{
+			position: relative;
+			pointer-events: none;
+			&:after{
+				@include content(100%,100%);
+				@include trans-xy();
+				background: rgba($black,.5);
+				border-radius: 10px;
+			}
+		}
+	}
+	&__itemImg{
+		aspect-ratio: 113/65;
+		object-fit: contain;
+		background: $white;
+		display: block;
+		border-radius: 10px;
+
+	}
+}

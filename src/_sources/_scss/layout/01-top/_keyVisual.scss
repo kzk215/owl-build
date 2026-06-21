@@ -1,0 +1,125 @@
+@use "../../_global/00-index" as *;
+.l-keyVisual{
+	position: relative;
+	@include flex;
+	justify-content: center;
+	align-items: flex-start;
+	margin-top: 40px;
+	height: 560px;
+	@include mqd(900px){
+		height: 75vw;
+		min-height: 560px;
+	}
+	@include mqd($md){
+		align-items: center;
+		min-height: initial;
+		width: 100%;
+		height: 420px;
+		margin-top: 0;
+	}
+	&:before{
+		@include content(100%,450px,$bg-color0);
+		left: 0;
+		bottom: -1px;
+		@include mqd($md){
+			height: 300px;
+		}
+	}
+	&__detail{
+		max-width: 1600px;
+		width: 100%;
+		margin:0 40px;
+		position: relative;
+		z-index: 1;
+
+		@include mqd($md){
+			margin:0 5%;
+			position: static;
+		}
+	}
+	&__bg{
+		position: absolute;
+		max-width: calc(50% + (1600px / 4));
+		width: 75%;
+		height: 560px;
+		display: block;
+		top:0;
+		right: 0;
+		overflow: hidden;
+		border-radius: 30px 0 0 30px;
+		@include mqd(900px){
+			height: 75vw;
+			min-height: 560px;
+		}
+		@include mqd($md){
+			min-height: initial;
+			height: 420px;
+			width: 85%;
+		}
+	}
+	&__bgItem{
+		object-fit: cover;
+		object-position: right bottom;
+		display: block;
+		width: 100%;
+		height: 100%;
+		@include mqd(1100px){
+			object-position: center bottom;
+		}
+		@include mqd(900px){
+			object-position: right center;
+		}
+	}
+	&__bgImg{
+
+	}
+	&__title{
+		margin-top: 40px;
+		@include mqd($md){
+			margin-top: 0;
+		}
+	}
+	&__leadWrap{
+		margin-top: 20px;
+		@include mqd($md){
+			width: 100%;
+			text-align: center;
+			position: absolute;
+			top: calc(100% + 100px);
+			margin-top: 0;
+			left: 0;
+		}
+	}
+	&__lead{
+
+		filter: drop-shadow(0 0 5px rgba($white,1));
+		font-weight: 500;
+		text-shadow:
+			1px 1px 0 $white,
+			-1px 1px 0 $white,
+			-1px -1px 0 $white,
+			1px -1px 0 $white;
+
+		@include mqd($md){
+			font-size: 1.8rem;
+		}
+	}
+	&__btnList{
+		margin-top: 60px;
+		@include flex;
+		flex-direction: column;
+		gap: 10px;
+		@include mqd(820px){
+			flex-direction: column;
+		}
+		@include mqd($md){
+			margin-top: 20px;
+			align-items: center;
+			flex-direction: column;
+		}
+		.c-btn{
+			min-width: 280px;
+		}
+	}
+
+}

@@ -1,0 +1,33 @@
+@use "../../_global/00-index" as *;
+.c-btnReset {
+	@include e-btn;
+	background: $white;
+	border: 1px solid $border-color;
+	color: $black;
+	padding: 5px 20px 5px 40px;
+	min-width: initial;
+	border-radius: 5px;
+	font-size: 1.4rem;
+	transition: opacity .3s;
+	@include mqd($md-lg){
+		margin-left: auto;
+	}
+	@include mqd($md){
+		font-size: 1.3rem;
+		padding: 5px 20px 5px 35px;
+	}
+	&:before{
+		@include content(35px,35px);
+		@include icon(reload);
+		@include trans-y();
+		left: 3px;
+		//animation: rotation .3s;
+		@include mqd($md){
+			@include content(28px,28px);
+		}
+	}
+	&:hover{
+		opacity: .6;
+	}
+
+}

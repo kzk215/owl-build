@@ -1,0 +1,70 @@
+@use "../_global/00-index" as *;
+
+$spacing-values: (
+	0: 0px,
+	4: 4px,
+	8: 8px,
+	10: 10px,
+	12: 12px,
+	16: 16px,
+	20: 20px,
+	24: 24px,
+	28: 28px,
+	30: 30px,
+	32: 32px,
+	36: 36px,
+	40: 40px,
+	48: 48px,
+	50: 50px,
+	56: 56px,
+	60: 60px,
+	64: 64px,
+	70: 70px,
+	80: 80px,
+	90: 90px,
+	100: 100px
+);
+
+// マージン用クラスを自動生成
+@each $key, $val in $spacing-values {
+	.u-m#{$key} { margin: $val !important; }
+	.u-mt#{$key} { margin-top: $val !important; }
+	.u-mr#{$key} { margin-right: $val !important; }
+	.u-mb#{$key} { margin-bottom: $val !important; }
+	.u-ml#{$key} { margin-left: $val !important; }
+	.u-mx#{$key} {
+		margin-left: $val !important;
+		margin-right: $val !important;
+	}
+	.u-my#{$key} {
+		margin-top: $val !important;
+		margin-bottom: $val !important;
+	}
+}
+@each $key, $val in $spacing-values {
+	@include mqd($md){
+		.u-m#{$key}__sm { margin: $val !important; }
+		.u-mt#{$key}__sm { margin-top: $val !important; }
+		.u-mr#{$key}__sm { margin-right: $val !important; }
+		.u-mb#{$key}__sm { margin-bottom: $val !important; }
+		.u-ml#{$key}__sm { margin-left: $val !important; }
+		.u-mx#{$key}__sm {
+			margin-left: $val !important;
+			margin-right: $val !important;
+		}
+		.u-my#{$key}__sm {
+			margin-top: $val !important;
+			margin-bottom: $val !important;
+		}
+	}
+}
+.u-ml_auto {
+	margin-left: auto;
+}
+.u-mr_auto {
+	margin-left: auto;
+}
+.u-mx_auto {
+	margin-left: auto;
+	margin-right: auto;
+}

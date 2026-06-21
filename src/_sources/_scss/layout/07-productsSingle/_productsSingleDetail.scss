@@ -1,0 +1,305 @@
+@use "../../_global/00-index" as *;
+.l-productsSingleDetail {
+	padding: 8rem 0;
+	$self : &;
+	@include mqd($md){
+		padding: 6rem 0;
+	}
+	&__spec{
+		@include flex;
+		gap: 0 10px;
+		@include mqd(1000px){
+			min-width: $md;
+		}
+		@include mqd($md-lg){
+			min-width: $md;
+		}
+		@include mqd($md){
+			min-width: initial;
+			gap:0 10px;
+		}
+
+	}
+	&__specWrap{
+		@include flex;
+		gap:0 10px;
+		@include mqd($lg){
+			overflow: auto;
+			margin-right: -5vw;
+			margin-left: -5vw;
+			padding: 0 5% 10px 5%;
+		}
+		@include mqd($md){
+			overflow: auto;
+			margin-right: 0;
+			margin-left: 0;
+			padding: 0 0 0 0;
+		}
+
+	}
+	&__specColumn{
+
+		@include mqd($md){
+			width: 100%;
+		}
+	}
+
+	&__specDl{
+		@include gap(10px,2);
+		padding: 15px 10px;
+		@include flex;
+		@include mqu($md){
+			&:nth-child(4n + 2),&:nth-child(4n + 1){
+				background: #F8FBFE;
+			}
+			//&:nth-child(2n + 2){
+			//	order: 2;
+			//
+			//}
+		}
+		@include mqd($md-lg){
+			padding: 10px 10px;
+
+		}
+		@include mqd($md){
+			width: 100%;
+			&:nth-child(even){
+				order: 2;
+			}
+			&.--odd{
+				background: #F8FBFE;
+			}
+		}
+	}
+	&__specDt{
+		width: 170px;
+		font-weight: 600;
+		@include mqd(1000px){
+			width: 100%;
+		}
+	}
+	&__specDd{
+		flex: 1;
+		@include mqd(1000px){
+		}
+	}
+
+	&__btnList{
+		@include flex;
+		justify-content: center;
+		margin-top: 4rem;
+		gap: 10px 20px;
+	}
+	&__btnItem{
+		width: 100%;
+		max-width: 350px;
+		@include mqd($md){
+			max-width: initial;
+		}
+	}
+
+
+	&__comparisonWrap{
+		padding: 20px 0;
+		@include mqd($md-lg){
+			box-sizing: border-box;
+			@include flex;
+			overflow: auto;
+			width: 100vw;
+			padding: 20px 5vw 40px;
+			margin: 0 -5vw;
+		}
+
+	}
+	&__comparison{
+		width: 100%;
+		-webkit-overflow-scrolling: touch;
+		table-layout: fixed;
+		text-align: center;
+		line-height: 1.6;
+		@include mqd($md-lg){
+			min-width: $md-lg;
+		}
+		thead{
+			#{$self}__comparisonEmphasis{
+				color: $accent_color;
+			}
+			th{
+				background:#F8FBFE;
+				//min-width: 210px;
+				text-align: center;
+				padding: 15px 5px;
+				vertical-align: middle;
+				line-height: 1.4;
+				color: $primary_color;
+				font-weight: 500;
+				//font-size: 1.6rem;
+				border-bottom: 1px solid #E8E8E8;
+				border-right: 1px solid #fff;
+				&:first-child{
+					border-radius: 5px 0 0 0;
+				}
+				&:last-child{
+					border-radius: 0 5px 0 0;
+					border-right: none;
+				}
+			}
+		}
+		tbody{
+			th,td{
+				border-bottom: 1px solid #E8E8E8;
+				padding: 15px 15px;
+				vertical-align: middle;
+				text-align: left;
+
+				//font-size: 1.6rem;
+				@include mqd($md){
+					padding: 10px 10px;
+				}
+			}
+			th{
+				font-weight: 600;
+			}
+		}
+	}
+ 	thead &__comparisonEmphasis{
+		position: relative;
+		$border-size: 2px;
+		@for $i from 1 through 11 {
+			&.--row#{$i}:before{
+				height: calc(56px * $i + 1px + 40px);
+			}
+			&.--row#{$i}:after{
+				height: calc(56px * $i + 1px + 40px - ($border-size * 2));
+			}
+		}
+		&:before{
+			background: linear-gradient(to bottom, #E44825, #FFF1BD);
+			@include content(100%,0);
+			position: absolute;
+			width: 100%;
+			z-index: -2;
+			top: -20px;
+			left: 0;
+			pointer-events: none;
+			border-radius: 10px;
+		}
+		&:after{
+			@include content(calc(100% - ($border-size * 2)),0);
+			position: absolute;
+			z-index: -1;
+			top: calc(-20px + ($border-size));
+			left: 2px;
+			pointer-events: none;
+			background: #FFF5F3;
+			border-radius: 8px;
+		}
+	}
+	thead &__comparisonEmphasisText{
+		top: -8px;
+		transform: scale(1.1);
+		position: relative;
+		padding: 0 20px;
+
+	}
+	&__comparisonEmphasisText{
+		display: block;
+		width: 100%;
+		height: 100%;
+		padding: 15px;
+
+	}
+	&__comparisonEmphasis{
+		position: relative;
+		z-index: 4;
+		border-bottom: 1px solid $white;
+		padding: 0 !important;
+
+	}
+	tbody &__comparisonEmphasis:after{
+		@include content(calc(100% - 6px),1px,$white);
+		bottom:100%;
+		@include trans-x();
+	}
+
+
+
+	&__point{
+		@include flex;
+		gap: 20px;
+		@include mqd($md){
+			gap: 10px;
+		}
+	}
+
+	&__pointImg{
+		height: 80px;
+		width: 100%;
+		object-fit: contain;
+		margin-bottom: 20px;
+		display: block;
+
+	}
+	&__pointItem{
+		padding: 70px 20px 20px;
+		background: $white;
+		border: 1px solid $primary_color;
+		position: relative;
+		border-radius: 10px;
+		@include flex;
+		flex-direction: column;
+		@include gap(20px,3);
+		@include mqd($md-lg){
+			@include gap(20px,2);
+			overflow: hidden;
+		}
+		@include mqd($md){
+			@include gap(10px,1);
+			padding: 70px 15px 15px;
+		}
+	}
+	&__pointNumber{
+		@include flex;
+		align-items: center;
+		font-size: 1.4rem;
+		gap: 5px;
+		color: $primary_color;
+		@include web-font02;
+		font-weight: 500;
+		position: absolute;
+		left: 20px;
+		top:10px;
+		z-index: 2;
+		@include mqd($md){
+
+		}
+		em{
+			-webkit-text-stroke: 1px $primary_color;
+			color: transparent;
+			font-size: 2.0em;
+			font-weight: 700;
+		}
+	}
+	&__pointLead{
+		text-align: center;
+		font-size: 2.2rem;
+		position: relative;
+		z-index: 2;
+		@include mqd($lg){
+			font-size: 1.8rem;
+		}
+		@include mqd($md-lg){
+			font-size: 2rem;
+		}
+		em{
+			font-weight: 600;
+			color: $primary_color;
+		}
+	}
+	&__pointText{
+		margin-top: 20px;
+		@include mqd($lg){
+			margin-top: 10px;
+		}
+	}
+}

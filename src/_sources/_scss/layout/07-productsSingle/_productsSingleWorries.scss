@@ -1,0 +1,191 @@
+@use "../../_global/00-index" as *;
+.l-productsSingleWorries {
+	padding: 8rem 0 0;
+	@include mqd($md){
+		padding: 6rem 0 0;
+	}
+
+	&__title{
+		display: block;
+		margin-left: auto;
+		width: 60%;
+		margin-bottom: 20px;
+		@include mqd($md-lg){
+			margin-right: auto;
+			width: 100%;
+			text-align: center;
+		}
+	}
+	&__titleImg{
+		display: block;
+		width: 100%;
+	}
+
+	&__box{
+		@include flex;
+		justify-content: space-between;
+		gap: 80px;
+		@include mqd($md-lg){
+			justify-content: center;
+			gap:20px 20px;
+		}
+	}
+	&__boxItem{
+		@include gap(80px,2);
+		@include mqu($md-lg){
+			&:nth-child(1){
+				margin-top: -100px;
+			}
+
+		}
+		@include mqd($md-lg){
+			max-width: 400px;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+		@include mqd($md){
+			width: 100%;
+			flex: initial;
+			max-width: 500px;
+		}
+	}
+
+	&__boxLead{
+
+	}
+	&__boxBefore{
+		margin-left: -4rem;
+		height: 240px;
+		width: 100%;
+		background: url(#{$dir}/products/cloud.svg) center center no-repeat;
+		background-size: contain;
+		@include flex;
+		align-items: center;
+		justify-content: center;
+		padding:0;
+		z-index: 4;
+		position: relative;
+		@include mqd($md-lg){
+			align-content:center ;
+		}
+		&:after{
+			@include content(97px,97px);
+			background: url(#{$dir}/products/arrow_icon.svg) center center no-repeat;
+			background-size: contain;
+			position: absolute;
+			left: calc(100% - 70px);
+			bottom: 30px;
+			@include mqd($md-lg){
+				content: none;
+			}
+		}
+		@include mqd($md-lg){
+			width: 100%;
+			max-width: 370px;
+			height: 60vw;
+			max-height: 240px;
+			margin: 0 auto;
+		}
+		&:before{
+			content: 'BEFORE';
+			position: absolute;
+			left: 2rem;
+			top:.8rem;
+			color: $accent_color;
+			font-size: 3.3rem;
+			@include mqd($md-lg){
+				font-size: 3rem;
+				width: 100%;
+				position: static;
+				margin-top: -2em;
+				margin-right: auto;
+				padding-left: .5em;
+				top: 2.5rem;
+			}
+		}
+	}
+	&__boxBeforeWrap{
+		width: fit-content;
+		text-align: left;
+	}
+	&__boxLead{
+		font-size: 2.4rem;
+		font-weight: 500;
+		margin-bottom: 10px;
+		@include mqd($md-lg){
+			font-size: 2.2rem;
+			margin-bottom: 0;
+		}
+	}
+	&__boxText{
+		font-size: 1.8rem;
+		min-height: 3em;
+		@include mqd($md-lg){
+			min-height: initial;
+		}
+		em{
+			font-weight: 600;
+			color: $accent_color;
+		}
+	}
+
+	&__boxUl{
+		@include flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	&__boxList{
+		position: relative;
+		font-size: 2.0rem;
+		padding-left: 1em;
+		line-height: 1.8;
+		@include mqd($md-lg){
+			font-size: 1.8rem;
+		}
+		em{
+			color: $primary_color;
+			font-weight: 600;
+		}
+		&:before{
+			top: .7em;
+			@include content(7px,7px,$primary_color);
+			border-radius: 50%;
+			left: 0;
+			@include mqd($md-lg){
+				top: 0.7em;
+			}
+		}
+		@include mqd($md){
+			br{
+				display: none;
+			}
+		}
+	}
+
+	&__boxAfter{
+		margin-top: -10rem;
+		border: 1px solid $primary-color;
+		border-radius: 10px;
+		padding: 10rem 3rem 6rem;
+		position: relative;
+		@include mqd($md-lg){
+			flex: 1;
+		}
+		&:after{
+			content: "AFTER";
+			position: absolute;
+			right: 1.5rem;
+			bottom: 1.5rem;
+			font-size: 4rem;
+			line-height: 1;
+			color: $primary_color;
+			@include mqd($md-lg){
+				font-size: 3rem;
+			}
+		}
+	}
+
+
+
+}

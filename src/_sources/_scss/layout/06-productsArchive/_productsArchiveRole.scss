@@ -1,0 +1,230 @@
+@use "../../_global/00-index" as *;
+.l-productsArchiveRole {
+	padding: 8.0rem 0 4.0rem;
+	$self : &;
+	&__list{
+		display: flex;
+		gap: 40px;
+		flex-direction: column;
+	}
+	&__box{
+		@include flex;
+		@include mqu($md-lg){
+			&:nth-child(odd) {
+				#{$self}__boxDetail {
+					padding: 4rem 3rem 2rem 8rem;
+					margin-left: -4rem;
+				}
+
+			}
+			&:nth-child(even){
+				#{$self}__boxDetail{
+					padding:4rem 8rem 2rem 3rem;
+					margin-right: -4rem;
+				}
+				#{$self}__boxImg{
+					order: 1;
+				}
+
+			}
+		}
+
+		@include mqd($md-lg){
+			margin: 0 auto;
+		}
+
+	}
+	&__boxImg{
+		position: relative;
+		z-index: 1;
+		width: 40%;
+		padding: 2rem 0;
+
+		@include mqd($md-lg){
+			padding: 0;
+			width: 100%;
+			height: 90vw;
+			max-height: 400px;
+
+		}
+	}
+	&__boxImgItem{
+		width: 100%;
+		height: 100%;
+		display: block;
+		object-fit: cover;
+		border-radius: 10px;
+		overflow: hidden;
+		@include mqd($md-lg){
+			height: 100%;
+
+		}
+	}
+	&__boxDetail{
+		background: $bg-color0;
+		border-radius: 10px;
+		flex: 1;
+
+		@include mqd($md-lg){
+			width: calc(100% + 4.5rem);
+			flex: initial;
+			padding:4rem 2.5rem 2.5rem;
+			margin: -2.5rem -2.5rem 0;
+			order: 2;
+		}
+		@include mqd($sm){
+			border-radius: 0;
+		}
+	}
+
+
+	&__boxTitleWrap{
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		margin-bottom: 2.0rem;
+		@include mqd($md-lg){
+			margin-bottom: 1.5rem;
+			gap: 15px;
+		}
+	}
+	&__boxCategory{
+		color: $white;
+		font-size: 3.0rem;
+		background: $primary_color;
+		padding: .8rem 2rem;
+		border-radius: 10px;
+		line-height: 1;
+		@include mqd($md-lg){
+			font-size: 2.3rem;
+		}
+	}
+	&__boxTitle{
+		flex: 1;
+		font-size: 2.6rem;
+		font-weight: 600;
+		letter-spacing: .1em;
+		@include mqd($md-lg){
+			font-size: 2rem;
+		}
+		em{
+			color: $primary_color;
+		}
+	}
+
+	&__boxText{
+		line-height: 1.8;
+	}
+	&__boxDl {
+		background: $white;
+		border-radius: 10px;
+		@include flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 2rem;
+		margin: 2rem 0 3rem;
+	}
+	&__boxDt{
+		font-size: 2.1rem;
+		font-weight: 600;
+		margin-bottom: 10px;
+		em{
+			color: $accent_color;
+		}
+	}
+	&__boxDd{
+		position: relative;
+		font-weight: 600;
+		padding-left: 1.5em;
+		&:before{
+			@include content(.4em,.9em);
+			border-bottom: 2px solid $accent_color;
+			border-right: 2px solid $accent_color;
+			left: .4em;
+			top:.3em;
+			@include trans-rotate(45);
+		}
+
+	}
+
+	&__boxExample{
+		@include flex;
+		align-items: flex-start;
+
+	}
+	&__boxExampleTitle{
+		font-size: 1.8rem;
+		font-weight: 500;
+		color: $dark-blue;
+	}
+	&__boxExampleText{
+		padding-top: .1em;
+		flex: 1;
+	}
+
+	&__boxBtnList{
+		margin-top: 20px;
+		@include flex;
+		flex-direction: column;
+		gap: 10px;
+		@include mqd($md-lg){
+			align-items: center;
+		}
+	}
+	&__boxBtn{
+		width: 100%;
+		max-width: 400px;
+	}
+
+
+	&__btn{
+		margin: 60px auto 0;
+		display: block;
+		width: fit-content;
+		position: relative;
+		text-align: center;
+		font-weight: 500;
+		font-size: 2.6rem;
+		background: #FFFFCB;
+		border-radius: 0 100px 100px 0;
+		padding:15px 80px 15px 80px;
+		border: 2px solid $primary_color;
+		color: $primary_color;
+		@include mqd($md){
+			font-size: 1.8rem;
+			padding:10px 50px 10px 40px;
+		}
+		&:before,&:after{
+			border-radius: 50%;
+			right: 20px;
+			@include content(5rem,5rem,$white);
+			@include trans-y();
+			border: 1px solid $primary_color;
+			@include mqd($md){
+				@include content(3.5rem,3.5rem,$white);
+				right: 10px;
+			}
+		}
+		&:after{
+			@include icon('arrow',$primary_color,14px);
+		}
+
+	}
+	&__btnSubText{
+		display: block;
+		font-size: .8em;
+	}
+	&__btnIcon{
+		position: absolute;
+		left: -66px;
+		width: 132px;
+		bottom: -7px;
+		@include mqd($md){
+			width: 80px;
+			left: -30px;
+		}
+
+	}
+
+
+}

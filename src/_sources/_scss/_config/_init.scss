@@ -1,0 +1,133 @@
+@charset "utf-8";
+@use "../_global/00-index" as *;
+
+/* CSS Document */
+/*
+  ------------------------------------
+  ####################################
+   #Common style
+  ####################################
+  ------------------------------------
+*/
+
+$dir-common: $dir + "init";
+/* Reset */
+@include reset;
+
+*{
+	box-sizing: border-box;
+	word-break: break-word;
+}
+html {
+	background: $white;
+	font-size: 10px;
+	//font-feature-settings: 'palt';
+	position: relative;
+	z-index: 0;
+	@include mqd($xs){
+		font-size: 9px;
+	}
+}
+
+body {
+	width: 100%;
+	@include web-font01;
+	line-height: $line-height;
+	font-size: $basefont;
+	color: $font-color;
+	letter-spacing: 1px;
+	&.js-noScroll {
+		overflow: hidden;
+	}
+
+	@include mqd($md){
+
+		min-width: inherit;
+		width: 100%;
+	}
+}
+
+.error{
+	color: red;
+	margin: 10px 0;
+}
+.wrap {
+	overflow: hidden;
+	width: 100%;
+	padding-top: 130px;
+	position: relative;
+	transition: opacity .3s;
+
+	&:has(.l-sideNav){
+		overflow: visible;
+		@include mqd($md-lg){
+			overflow: hidden;
+		}
+	}
+	@include mqd($md){
+		padding-top: 70px;
+	}
+	&.js-load{
+		//opacity: 1;
+	}
+}
+.init__border{
+	max-width: 1200px;
+	margin: 0 auto;
+	position: relative;
+	pointer-events: none;
+	z-index: -1;
+	span{
+		position: fixed;
+		display: block;
+		border-right: 1px solid #E4EAF4;
+		top:0;
+		height: 100vh;
+		@include trans-x();
+
+		&:nth-child(2){
+			left: calc(50% - 500px);
+		}
+		&:nth-child(3){
+			left: calc(50% + 500px);
+		}
+	}
+
+}
+a {
+	text-decoration: none;
+	color: $black;
+	transition:.3s opacity;
+	&:hover{
+		opacity: .7;
+	}
+}
+
+p{
+	//line-height: 1.6;
+}
+img{
+	max-width: 100%;
+}
+small{
+	font-size: 85%;
+}
+
+.no_post{
+	text-align: center;
+	width: 100%;
+}
+
+
+#wpadminbar{
+	position: fixed !important;
+}
+
+.customize-support{
+	.l-header{
+		top: 32px;
+		@include mqd(782px){
+			top: 46px;
+		}
+	}
+}

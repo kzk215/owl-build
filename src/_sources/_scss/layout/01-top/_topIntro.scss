@@ -1,0 +1,190 @@
+@use "../../_global/00-index" as *;
+.l-topIntro{
+	padding: 80px 0 20px;
+	background: $bg-color0;
+	@include mqd($md){
+		padding-top: 250px;
+	}
+
+	&__title{
+		display: block;
+		margin: 0 auto 40px;
+		//text-align: center;
+		text-align: center;
+	}
+
+
+	&__box{
+		@include flex;
+		gap: 15px;
+		@include mqd($md){
+			gap: 60px;
+		}
+	}
+
+	&__item{
+		@include gap(15px,3);
+		position: relative;
+		@include mqd($md){
+			width: 100%;
+			&:nth-child(2):before,&:nth-child(3):before{
+				@include content(100vw,calc(100% + 60px));
+				@include trans-xy();
+			}
+			&:nth-child(2):before{
+				background: #E8EFF4;
+			}
+			&:nth-child(3):before{
+				background: #D4E1EA;
+			}
+		}
+
+		&:before{
+			@include content(100%,3em,$white);
+			z-index: -1;
+			bottom:0;
+			left: 0;
+			border-radius: 0 0 10px 10px;
+		}
+	}
+	&__itemLead{
+		background: $white;
+		padding:30px 20px;
+		margin-bottom: 80px;
+		border-radius: 10px;
+		font-weight: 500;
+		font-size: 2.2rem;
+		position: relative;
+		@include mqd($lg){
+			font-size: 1.8rem;
+		}
+		@include mqd($md-lg){
+			font-size: 1.6rem;
+		}
+		@include mqd($md){
+			font-size: 2.2rem;
+			padding: 20px;
+		}
+		em{
+			color: $accent_color;
+		}
+
+		&:before{
+			@include content(20px,28px);
+			@include icon(arrow_bottom);
+			@include trans-x();
+			top:calc(100% + 20px);
+		}
+	}
+	&__itemText{
+		position: relative;
+		z-index: 1;
+		filter: drop-shadow(0 0 5px rgba($white,1));
+		text-shadow:
+			1px 1px 0 $white,
+			-1px 1px 0 $white,
+			-1px -1px 0 $white,
+			1px -1px 0 $white;
+	}
+	&__itemLeadImg{
+		position: absolute;
+		bottom: 5px;
+		right: 10px;
+		z-index: 0;
+		width: 28%;
+		@include mqd($md){
+			width: 90px;
+		}
+	}
+
+	&__itemAnswer{
+		position: relative;
+		background: $white;
+		border-radius: 10px;
+		padding: 30px;
+		@include mqd($md-lg){
+			padding: 30px 10px;
+		}
+		@include mqd($md){
+			padding: 30px 20px;
+		}
+		&:after{
+			content: "ANSWER";
+			position: absolute;
+			@include trans-x();
+			bottom:calc(100% - .8em);
+			font-size: 3.2rem;
+			width: 100%;
+			text-align: center;
+			@include web-font02;
+			color: $primary_color;
+			@include mqd($md-lg){
+				font-size: 2.8rem;
+			}
+			@include mqd($md){
+				font-size: 3.2rem;
+			}
+
+		}
+	}
+
+	&__itemBubble{
+		background: $primary_color;
+		margin-bottom: 20px;
+		color: $white;
+		text-align: center;
+		font-size: 2.0rem;
+		font-weight: 500;
+		padding: 20px 5px;
+		border-radius: 10px 10px 10px 0;
+		position: relative;
+		@include mqd($lg){
+			font-size: 1.6vw;
+		}
+		@include mqd($md-lg){
+			font-size: 1.4rem;
+		}
+		@include mqd($md){
+			font-size: 2.0rem;
+		}
+		&:before{
+			@include content(20px,20px);
+			background: url(#{$dir}/common/bubble.svg) no-repeat top center;
+			background-size: contain;
+			position: absolute;
+			top:100%;
+			left: 0;
+
+		}
+	}
+	&__itemText{
+		display: block;
+		padding: 0 10px;
+		@include mqd($md-lg){
+			font-size: 1.4rem;
+		}
+		@include mqd($md){
+			font-size: 1.6rem;
+		}
+	}
+
+	&__titleDot{
+		max-width: 750px;
+		width: 70%;
+		display: block;
+		margin: 20px auto;
+		@include mqd($md){
+			display: none;
+		}
+	}
+	&__titleItem{
+		max-width: 810px;
+		margin: 0 auto;
+		display: block;
+		@include mqd($md){
+			width: 100%;
+			max-width: 400px;
+			margin-top: 50px;
+		}
+	}
+}

@@ -1,0 +1,35 @@
+//  ------------------------------------
+//   FONT指定
+//  ------------------------------------
+$font-dir : "../../assets/fonts";
+@mixin fo-min {
+	//ヒラギノ明朝
+	font-family: 'Noto Serif JP',"ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
+
+	//遊明朝
+	//font-family: "Yu Mincho", "YuMincho",'Sawarabi Mincho',"ヒラギノ明朝 ProN W6", "HiraMinProN-W6", serif;
+}
+
+//ゴシック
+@mixin fo-go {
+	//ヒラギノ角ゴ
+	font-family:'ヒラギノ角ゴシック', 'Hiragino Sans', 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', 'メイリオ', 'Meiryo', 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+
+	//遊ゴシック
+	//font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", "メイリオ";
+	//font-weight: 500;
+}
+
+//  webフォント
+@mixin web-font01 {
+	font-family: "Zen Kaku Gothic New", sans-serif;
+	font-style: normal;
+}
+
+@mixin web-font02 {
+	font-family: "Barlow", sans-serif;
+	font-style: normal;
+}
+@mixin web-font03 {
+	//font-family: 'futura-condensed-bold', sans-serif;
+}

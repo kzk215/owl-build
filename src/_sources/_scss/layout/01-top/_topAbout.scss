@@ -1,0 +1,23 @@
+@use "../../_global/00-index" as *;
+.l-topAbout{
+	position: relative;
+	padding: 80px 0;
+	text-align: center;
+	@include mqd($md){
+		padding: 40px 0;
+	}
+
+	&__titleItem{
+		display: block;
+		margin-top: -130px;
+		@include mqd($lg){
+			margin-top: -13vw;
+		}
+		@include mqd($md){
+			//margin-top: 0;
+			margin-top: -14vw;
+
+		}
+	}
+
+}

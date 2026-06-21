@@ -1,0 +1,36 @@
+@use "../../_global/00-index" as *;
+
+.c-title {
+	@include web-font02;
+	font-size: 5.6rem;
+	font-weight: 500;
+	letter-spacing: .1em;
+	line-height: 1;
+	@include mqd($md) {
+		font-size: 3.8rem;
+		margin-top: 5px;
+	}
+
+	&__sub {
+		font-weight: 500;
+		color: $primary_color;
+		font-size: 1.6rem;
+	}
+
+	&__wrap {
+		margin-top: 30px;
+		margin-bottom: 40px;
+		@include mqd($md) {
+			margin-top: 20px;
+		}
+	}
+
+	&__lead {
+		margin-top: 10px;
+		font-size: 2.0rem;
+		font-weight: 500;
+		@include mqd($md) {
+			font-size: 1.6rem;
+		}
+	}
+}
