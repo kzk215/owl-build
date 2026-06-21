@@ -1,7 +1,7 @@
 // _scripts/build-all.mjs
 // 全ターゲット（または指定ターゲット）を順次ビルド、または並列 watch するスクリプト
 import { execSync, spawn } from "node:child_process";
-import { TARGETS } from "./paths.mjs";
+import { TARGETS } from "../paths.mjs";
 
 const mode = process.env.MODE ?? "development";
 const watch = process.env.WATCH === "1";

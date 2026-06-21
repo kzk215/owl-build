@@ -1,6 +1,6 @@
 // _scripts/lint-scss.mjs
 import { execSync } from "node:child_process";
-import { STYLELINT_GLOB } from "./paths.mjs";
+import { STYLELINT_GLOB } from "../paths.mjs";
 
 try {
 	console.log("Linting:", STYLELINT_GLOB);

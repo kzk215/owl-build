@@ -7,7 +7,7 @@ import autoprefixer from "autoprefixer";
 import sortMediaQueries from "postcss-sort-media-queries";
 import cssnano from "cssnano";
 
-import {TARGETS, EXCLUDE_IMG_DIR, resolveTargetPaths} from "./_scripts/paths.mjs";
+import {TARGETS, EXCLUDE_IMG_DIR, resolveTargetPaths} from "./paths.mjs";
 
 /* =========================
  * Rollup Output Config

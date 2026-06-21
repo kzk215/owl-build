@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import { ensureDir } from "./file-utils.mjs";
 import { writeSassOutput } from "./sass-utils.mjs";
 import * as sass from "sass";
-import { CSS_ABS, CSS_REL, SCSS_ABS } from "../paths.mjs";
+import { CSS_ABS, CSS_REL, SCSS_ABS } from "../../paths.mjs";
 
 
 /* =========================
