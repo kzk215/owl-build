@@ -1,0 +1,32 @@
+{
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "vite build --mode development",
+    "prod": "vite build --mode production",
+    "lint-scss": "node _scripts/lint-scss.mjs"
+  },
+  "bin": {
+    "owl-build": "./bin/owl-build.mjs"
+  },
+  "type": "module",
+  "devDependencies": {
+    "autoprefixer": "^10.4.23",
+    "cssnano": "^7.1.2",
+    "postcss": "^8.5.6",
+    "postcss-sort-media-queries": "^5.2.0",
+    "sass": "^1.97.1",
+    "stylelint": "^16.26.1",
+    "stylelint-config-standard-scss": "^16.0.0",
+    "stylelint-scss": "^6.14.0",
+    "swiper": "^12.0.3",
+    "vite": "^6.4.1",
+    "vite-plugin-checker": "^0.12.0",
+    "vite-plugin-sass-glob-import": "^5.0.0",
+    "vite-plugin-static-copy": "^3.1.4"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "degit": "^3.4.7",
+    "fs-extra": "^11.3.5"
+  }
+}

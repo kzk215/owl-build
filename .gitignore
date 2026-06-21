@@ -1,0 +1,15 @@
+*~
+*.bak
+.DS_Store
+.idea/
+.bundle/
+.bk/
+.dist/
+prepros-6.config
+.env-local
+
+node_modules/
+package-lock.json
+
+.data/
+uploads/

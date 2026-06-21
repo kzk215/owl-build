@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  php:
+    image: ${PHP_IMAGE}
+    command: bash -c "a2enmod include && apache2-foreground"
+    volumes:
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/apache/ssi.conf:/etc/apache2/conf-enabled/ssi.conf
+      - ./src:/var/www/html
+    ports:
+      - ${APACHE_HOST_PORT_80}:80
