@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
+import readline from 'readline';
 
 const __dirname = (() => {
   try {
@@ -54,14 +55,44 @@ async function run() {
 
   // オプションの解析
   for (let i = 0; i < args.length; i++) {
-    if ((args[i] === '-wp' || args[i] === '--wp') && args[i + 1]) {
-      themeName = args[i + 1];
+    if ((args[i] === '-wp' || args[i] === '--wp')) {
+      if (args[i + 1] && !args[i + 1].startsWith('-')) {
+        themeName = args[i + 1];
+        i++; // 次の引数をスキップ
+      } else {
+        // 次の引数がない、または別のオプションが来ている場合は、後で入力を促すためにフラグなどを立てる必要はない
+        // themeName は null のまま
+      }
     }
     if (args[i] === '-html' || args[i] === '--html') {
       isHtmlMode = true;
     }
     if (args[i] === '--local') {
       useLocal = true;
+    }
+  }
+
+  // WordPressモードでテーマ名がない場合、対話形式で取得
+  if (!themeName && !isHtmlMode && args.some(arg => arg === '-wp' || arg === '--wp')) {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    const askThemeName = () => {
+      return new Promise((resolve) => {
+        rl.question('Enter theme name: ', (answer) => {
+          resolve(answer.trim());
+        });
+      });
+    };
+
+    themeName = await askThemeName();
+    rl.close();
+
+    if (!themeName) {
+      console.error('Error: Theme name is required.');
+      process.exit(1);
     }
   }
 
