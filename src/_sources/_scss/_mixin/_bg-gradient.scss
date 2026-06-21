@@ -1,0 +1,8 @@
+// グラデーション
+@mixin bg-gradient($rad: 180, $color: #0bd, $amount: 20%) {
+	background: linear-gradient($rad + deg, $color, adjust-hue($color, $amount)) fixed;
+}
+
+@mixin bg-gradient-mlt($rad: 180, $color1: #0bd, $color2 : #0bd) {
+	background: linear-gradient($rad + deg, $color1 0%, $color2 100%);
+}

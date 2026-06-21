@@ -1,0 +1,47 @@
+@use "../../_global/00-index" as *;
+.l-columnSingle {
+	padding-right: 50px;
+	border-right: 1px solid #E8E8E8;
+	@include mqd($lg){
+		padding-right: 25px;
+
+	}
+	@include mqd($md-lg){
+		border: none;
+		padding-right: 0;
+	}
+	&__title{
+		font-size: 3.0rem;
+		font-weight: 500;
+		margin-top: 5px;
+		@include mqd($md){
+
+			font-size: 2.4rem;
+		}
+	}
+	&__keyVisual{
+		display: block;
+		margin: 20px 0;
+		height: auto;
+		width: 100%;
+		border-radius: 10px;
+	}
+
+	&__date{
+		color: #777;
+		font-size: 1.3rem;
+		margin-top: 10px;
+		@include flex;
+		gap: 21px;
+	}
+	&__dateLast{
+		position: relative;
+		&:after{
+			@include content(1px,.8em);
+			border-right: 1px solid #777;
+			@include trans-y();
+			right: -10px;
+
+		}
+	}
+}

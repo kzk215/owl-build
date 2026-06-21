@@ -1,0 +1,97 @@
+@use "../_global/00-index" as *;
+.b-postRelated {
+	display: flex;
+	align-items: flex-start;
+	padding: 20px;
+	padding-right: 40px;
+	border-radius: 10px;
+	gap: 20px;
+	width: 100%;
+	border: $border-color solid 1px;
+	background: #F8FBFE;
+	color: $dark-blue;
+	margin: 40px auto;
+	position: relative;
+	@include mqd($md){
+		flex-wrap: wrap;
+		padding: 15px;
+		max-width: 450px;
+		//margin: 0 auto;
+		margin-left: 0;
+	}
+	&:after{
+		@include content();
+		@include trans-y();
+		@include icon(arrow,$primary_color,12px);
+		right: 10px;
+		@include mqd($md){
+			content: none;
+		}
+	}
+	&__titleWrap{
+		display: flex;
+		align-items: center;
+		width: 100%;
+		margin-bottom: 10px;
+		@include mqd($md){
+			flex-wrap: wrap;
+		}
+	}
+	&__sub{
+		line-height: 1.5;
+		font-size: 1.4rem;
+		padding-right: 20px;
+		margin-right: 20px;
+		position: relative;
+		&:after{
+			@include content(1px,80%);
+			border-right: 1px solid $border-color;
+			@include trans-y();
+			left: 100%;
+		}
+	}
+	&__date{
+		line-height: 1.5;
+		font-size: 1.4rem;
+		margin-right: 15px;
+
+	}
+	&__title{
+		line-height: 1.5;
+		font-weight: 500;
+		flex: 1;
+		color: $dark-blue !important;
+		@include line-clamp(1);
+		margin: 0 !important;
+		@include mqd($md){
+			margin-top: 10px !important;
+			width: 100%;
+			flex: inherit;
+		}
+	}
+	&__text{
+		color: #446E9B;
+		font-size: 1.2rem;
+		line-height: 1.6 !important;
+		margin: 0 !important;
+		@include line-clamp(2);
+	}
+	&__detail{
+		width: calc(100% - 145px - 20px);
+		@include mqd($md){
+			width: 100%;
+			order: 2;
+		}
+	}
+	&__img{
+		display: block;
+		object-fit: cover;
+		width: 145px;
+		aspect-ratio: 16 / 9;
+		border-radius: 5px;
+		@include mqd($md){
+			width: 100%;
+			margin: 0 auto;
+		}
+	}
+}

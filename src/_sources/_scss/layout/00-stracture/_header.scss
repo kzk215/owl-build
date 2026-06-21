@@ -1,0 +1,64 @@
+@use "../../_global/00-index" as *;
+.l-header{
+	position: fixed;
+	width: 100%;
+	left: 0;
+	top:0;
+	z-index: 999;
+	padding: 20px 40px;
+	background: $white;
+	@include flex;
+	justify-content: space-between;
+	transition:.3s;
+	transition-property: transform,padding;
+	align-items: center;
+	&.js-hidden{
+		transform: translateY(-100%);
+	}
+
+
+
+	&.js-scroll{
+		padding: 10px 40px 10px;
+		align-items: center;
+		@include shadow();
+	}
+
+	@include mqd($lg){
+		padding: 20px 20px;
+		align-items: center;
+
+		&.js-scroll{
+			padding: 10px 20px 10px;
+		}
+	}
+	@include mqd($md-lg){
+
+	}
+	@include mqd($md){
+		padding: 10px 20px 10px;
+		height: 70px;
+
+	}
+	&__logo{
+		display: block;
+		width: fit-content;
+	}
+	&__logoItem{
+		width: 200px;
+		display: block;
+		margin: -15px 0;
+		@include mqd($lg){
+			width: 170px;
+		}
+		@include mqd($md){
+			width: 120px;
+			margin: -5px 0;
+		}
+	}
+	&__logoImg{
+		display: block;
+	}
+
+
+}

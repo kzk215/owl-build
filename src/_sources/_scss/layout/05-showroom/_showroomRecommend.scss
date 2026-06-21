@@ -1,0 +1,42 @@
+@use "../../_global/00-index" as *;
+.l-showroomRecommend {
+	padding: 60px 0 40px;
+	position: relative;
+	background: #F2F6F9;
+	@include mqd($md){
+		padding: 40px 0 40px;
+	}
+	&__title{
+		text-align: center;
+		margin-bottom: 40px;
+		font-size: 3.6rem;
+		font-weight: 600;
+		letter-spacing: .1em;
+		em{
+			color: $primary-color;
+		}
+		@include mqd($md){
+			font-size: 2.8rem;
+			margin-bottom: 20px;
+		}
+	}
+
+	&__img{
+		margin: 0 auto;
+		display: block;
+		width: fit-content;
+		@include mqd($sm){
+			margin: 0 auto;
+			width: 140%;
+			max-width: 400px;
+			position: relative;
+			@include trans-x();
+		}
+	}
+	&__imgItem{
+		@include mqd($sm){
+			width: 100%;
+			display: block;
+		}
+	}
+}

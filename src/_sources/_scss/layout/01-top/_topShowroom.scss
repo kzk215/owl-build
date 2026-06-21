@@ -1,0 +1,54 @@
+@use "../../_global/00-index" as *;
+.l-topShowroom {
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+	padding: 100px 0 ;
+	color: $white;
+
+	&__title,&__text{
+		@include shadow(2px,2px,2px,1,#000);
+	}
+	&__title{
+		font-size: 3.2rem;
+		margin-bottom: .5em;
+		line-height: 1.4;
+		@include mqd($md){
+			font-size: 2.8rem;
+		}
+	}
+	&__text{
+		font-size: 2.0rem;
+		@include mqd($md){
+			font-size: 1.8rem;
+		}
+	}
+	&__bg{
+		position: absolute;
+		@include flex;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		z-index: -1;
+		@include mqd($md){
+			flex-direction: column;
+
+		}
+	}
+	&__bgItem{
+		width: 50%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 50%;
+		@include mqd($md){
+			height: 50%;
+			width: 100%;
+		}
+	}
+	&:before{
+		@include content(100%,100%,rgba(#000,.5));
+		z-index: 0;
+		@include trans-xy()
+	}
+}

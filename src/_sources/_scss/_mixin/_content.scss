@@ -1,0 +1,9 @@
+@mixin content($width: 20px,$height: 20px,$bg: null) {
+	content: "";
+	position: absolute;
+	background: $bg;
+	width: $width;
+	height: $height;
+	display: block;
+	box-sizing:border-box;
+}

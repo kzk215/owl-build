@@ -1,0 +1,12 @@
+@use "../../_global/00-index" as *;
+.c-overlay {
+	display: none;
+	@include mqd($md-lg){
+		@include e-overlay;
+		background-color: rgba(#5D788C,.8);
+		height: 100svh;
+		position: absolute;
+		display: block;
+	}
+
+}

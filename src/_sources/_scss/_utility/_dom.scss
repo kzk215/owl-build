@@ -1,0 +1,48 @@
+@use "../_global/00-index" as *;
+
+.u-pc {
+	display: block;
+}
+
+.u-pc-flex {
+	display: flex;
+}
+
+.u-pc-ib {
+	display: inline-block;
+}
+
+.u-sp,
+.u-sp-flex,
+.u-sp-flex,
+.u-sp-ib {
+	display: none !important;
+}
+
+.u-sm{
+	display: none !important;
+}
+
+@include mqd($md){
+	.u-sp {
+		display: block !important;
+	}
+	.u-sp-flex {
+		display: flex !important;
+	}
+
+	.u-sp-ib {
+		display: inline-block !important;
+	}
+
+	.u-pc,
+	.u-pc-flex,
+	.u-pc-ib {
+		display: none !important;
+	}
+}
+@include mqd($sm){
+	.u-sm {
+		display: block !important;
+	}
+}

@@ -1,0 +1,16 @@
+@use "../_global/00-index" as *;
+.c-marker {
+	position: relative;
+	&:before{
+		@include content(0,100%,#F2F7A7);
+		left: 0;
+		transition: width 0.3s 0.4s ease-in;
+		@include trans-y();
+		z-index: -1;
+	}
+
+	&.js-inView:before{
+		width: 100%;
+	}
+
+}

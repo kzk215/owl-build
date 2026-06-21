@@ -1,0 +1,25 @@
+
+@use "../_global/00-index" as *;
+
+.c-caution {
+	font-size: 1.3rem;
+	color: $font-gray;
+	position: relative;
+	padding-left: 1.3em;
+	&.--number{
+		padding-left: 2.3em;
+		&:before{
+			counter-increment: caution;
+			content: "※" counter(caution) " ";
+			left: 0;
+			top: 0;
+			position: absolute;
+		}
+	}
+	&:before{
+		content: '※ ';
+		left: 0;
+		top: 0;
+		position: absolute;
+	}
+}

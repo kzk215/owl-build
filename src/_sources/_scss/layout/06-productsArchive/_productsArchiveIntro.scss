@@ -1,0 +1,131 @@
+@use "../../_global/00-index" as *;
+.l-productsArchiveIntro {
+	padding: 0 0 6rem;
+	@include mqd($md){
+		padding: 2rem 0 4rem;
+	}
+
+	&__box{
+		border: 1px solid $accent_color;
+		padding: 0 20px 0 20px;
+		border-radius: 5px;
+		margin-bottom: 40px;
+		background: #FFF2F3;
+	}
+	&__boxTitle{
+		text-align: center;
+		color: $accent_color;
+		font-weight: 600;
+		letter-spacing: .1em;
+		padding: 1.5rem;
+		font-size: 2.2rem;
+		position: relative;
+		cursor: pointer;
+		@include mqd($md){
+			padding-left: 0;
+			text-align: left;
+		}
+		&__icon{
+			position: absolute;
+			@include trans-y();
+			right: 0;
+			width: 20px;
+			height: 20px;
+			display: block;
+			@include mqd($md){
+				width: 13px;
+				height: 13px;
+			}
+			&:before,&:after{
+				@include content(100%,2px);
+				background: $accent_color;
+				@include mqd($md){
+					@include content(100%,1px);
+				}
+			}
+			&:before{
+				@include trans-xy();
+			}
+			&:after{
+				@include trans-xy(90);
+			}
+		}
+		&.js-toggle &__icon:after{
+			@include trans-xy();
+		}
+	}
+	&__boxTitle.js-toggle + &__boxContent{
+		@include flex;
+	}
+	&__boxContent{
+		display: none;
+		border-top: 1px solid $accent_color;
+		padding: 20px 0 20px 40px;
+		gap: 40px;
+		@include mqd($md){
+			gap: 20px;
+			padding-left: 20px;
+		}
+	}
+	&__boxDetail{
+		width: 60%;
+		margin-top: 30px;
+		@include mqd($md){
+			width: 100%;
+			margin-top: 0;
+		}
+	}
+
+	&__boxTitle{
+		font-size: 2.0rem;
+		line-height: 2;
+		position: relative;
+		@include mqd($md){
+			font-size: 1.6rem;
+		}
+
+	}
+	&__boxLead{
+		font-weight: 600;
+		position: relative;
+		font-size: 2.0rem;
+		letter-spacing: .1em;
+		@include mqd($md){
+			font-size: 1.6rem;
+		}
+		&:before{
+			@include content(30px,1px,$accent_color);
+			top:.7em;
+			right: calc(100% + 10px);
+			@include mqd($md){
+				width: 15px;
+				right: calc(100% + 5px);
+
+			}
+		}
+	}
+	&__boxText{
+		line-height: 1.8;
+		margin-top: 20px;
+		@include mqd($md){
+			font-size: 1.4rem;
+		}
+	}
+	&__boxImg{
+		flex:1;
+		@include mqd($md){
+			flex: initial;
+			width: 100%;
+
+		}
+	}
+	&__boxCaption{
+		text-align: center;
+		font-weight: 600;
+		font-size: 1.4rem;
+		@include mqd($md){
+			font-size: 1.2rem;
+		}
+	}
+
+}

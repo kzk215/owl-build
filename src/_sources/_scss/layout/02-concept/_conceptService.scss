@@ -1,0 +1,141 @@
+@use "../../_global/00-index" as *;
+.l-conceptService{
+	padding: 0 0 80px;
+	@include mqd($md){
+		padding: 60px 0 60px;
+	}
+	&__title{
+		text-align: center;
+		position: relative;
+		font-size: 4.7rem;
+		font-weight: 700;
+		color: #093F7A;
+		padding-bottom: 30px;
+		letter-spacing: .2em;
+		margin-bottom: 30px;
+		@include mqd($md){
+			font-size: 3.0rem;
+		}
+		&:before{
+			@include content(46px,9px);
+			@include trans-x();
+			top:100%;
+			background: url(#{$dir}/concept/title-dot.svg) center center no-repeat;
+			background-size: contain;
+
+		}
+	}
+
+	&__box{
+		margin: 100px 0 150px;
+		position: relative;
+		padding-bottom: 50px;
+		@include mqd($md-lg){
+			padding-bottom: 0;
+			margin: 60px 0 60px;
+		}
+	}
+	strong{
+		font-weight: bold;
+	}
+	&__detail01,	&__detail02{
+		width: 30%;
+		z-index: 1;
+		position: absolute;
+
+		&:before{
+			z-index: -1;
+			@include content(calc(35vw + 60px),calc(35vw + 60px),#F8FBFD);
+			max-width: 570px;
+			max-height: 570px;
+			@include trans-xy();
+			border-radius: 50%;
+			border: 1px #D9EBFF solid;
+			@include mqd($lg){
+				@include content(calc(40vw + 60px),calc(40vw + 60px),#F8FBFD);
+			}
+			@include mqd($md-lg){
+				content: none;
+			}
+		}
+		@include mqd($lg){
+			width: 35%;
+		}
+		@include mqd($md-lg){
+			width: 100%;
+			position: relative;
+			margin: 80px auto 0;
+			background:#F8FBFD ;
+			border: 1px #D9EBFF solid;
+			border-radius: 10px;
+			top: initial;
+			bottom: initial;
+			max-width: 540px;
+			padding: 30px 20px;
+
+		}
+		@include mqd($md){
+
+		}
+	}
+	&__detail01{
+		right: 0;
+		top: 10px;
+	}
+	&__detail02{
+		left: 0;
+		bottom: 10px;
+
+	}
+	&__chara{
+		width: 270px;
+		position: absolute;
+		right: -40px;
+		bottom: calc(100% - 50px);
+		z-index: -1;
+		@include mqd($lg){
+			width: 180px;
+		}
+		@include mqd($md-lg){
+			bottom: calc(100% - 80px);
+			right: 0;
+
+		}
+	}
+
+	&__detailLead{
+		font-size: 2.6rem;
+		font-weight: 500;
+		margin-bottom: 20px;
+
+		color: $primary_color;
+		@include mqd($lg){
+			font-size: 2.2rem;
+		}
+	}
+	&__detailText{
+		font-size: 2.0rem;
+		line-height: 1.8;
+		@include mqd($lg){
+			font-size: 1.6rem;
+		}
+	}
+	&__img{
+		margin: 0 auto;
+		display: block;
+		max-width: 620px;
+		width: 50%;
+		position: relative;
+		z-index: 2;
+		@include mqd($lg){
+			width: calc(40% - 40px);
+		}
+		@include mqd($md-lg){
+			max-width: 500px;
+			margin: 0 auto;
+			width: 100%;
+		}
+	}
+
+
+}

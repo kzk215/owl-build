@@ -1,0 +1,70 @@
+@use "../../_global/00-index" as *;
+.l-showroomKeyVisual {
+	position: relative;
+	padding-bottom: 30px;
+	@include mqd($md){
+		padding-bottom: 40px;
+	}
+
+	&__title{
+		margin-bottom: 20px;
+		@include mqd($md){
+			margin-bottom: 20px;
+		}
+	}
+
+	&__img{
+		display: block;
+		@include mqd($md){
+			border-radius: 10px;
+		}
+	}
+	&__box{
+		@include flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+		background: $white;
+		width: 90%;
+		padding: 30px 30px;
+		border-radius: 20px;
+		margin: -40px auto 0;
+		position: relative;
+		z-index: 2;
+		@include mqd($md-lg){
+			justify-content: center;
+			width: 95%;
+			padding: 20px;
+		}
+		@include mqd($md){
+			width: 100%;
+			padding: 0;
+			margin-top: 20px;
+		}
+	}
+	&__boxDetail{
+		flex: 1;
+		@include mqd($md-lg){
+			flex: initial;
+			width: 100%;
+		}
+	}
+	&__boxTitle{
+		color: $primary_color;
+		font-weight: 600;
+		font-size: 2.6rem;
+		margin-bottom: .3em;
+		@include mqd($md){
+			font-size: 2.0rem;
+		}
+	}
+
+	&__boxText{
+		font-size: 1.8rem;
+		font-weight: 500;
+		line-height: 1.8;
+		@include mqd($md){
+			font-size: 1.6rem;
+		}
+	}
+}

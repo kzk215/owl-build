@@ -1,0 +1,84 @@
+@use "../../_global/00-index" as *;
+
+.c-card {
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+	font-size: 1.8rem;
+	gap: 10px 20px;
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	@include mqd($md) {
+		font-size: 1.6rem;
+		padding-bottom: 0;
+		margin-bottom: 0;
+	}
+
+	&__img {
+		border-radius: 5px;
+		position: relative;
+		overflow: hidden;
+		display: block;
+		width: 100%;
+
+		&:after, &:before {
+			@include content(2.2em, 2.2em);
+			bottom: 0;
+			right: 0;
+		}
+
+		&:after {
+			@include icon(arrow, $primary_color, .8em);
+		}
+
+		&:before {
+			background: $bg-color0;
+			border-radius: 5px 0 0 0;
+		}
+	}
+
+	&__imgItem {
+		object-fit: cover;
+		aspect-ratio: 16 / 9;
+		display: block;
+		height: 100%;
+		width: 100%;
+	}
+
+	&__title {
+		font-size: 1.2em;
+		line-height: 1.4;
+		letter-spacing: .1em;
+		font-weight: 500;
+		margin-top: .5em;
+		@include mqd($md) {
+			font-size: 1.8rem;
+			letter-spacing: 1px;
+		}
+	}
+
+	&__date {
+		font-size: 1.8rem;
+		font-weight: 500;
+		display: block;
+		margin-bottom: 5px;
+		color: #759CC6;
+	}
+
+	&__category {
+		@include flex;
+		gap: 5px;
+	}
+
+	&__categoryItem {
+		background: $white;
+		color: $primary_color;
+		border: 1px solid $primary_color;
+		padding: 0 10px;
+		border-radius: 5px;
+		font-size: .9em;
+		font-weight: 500;
+	}
+
+
+}

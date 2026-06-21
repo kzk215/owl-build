@@ -1,0 +1,40 @@
+// 縦横中央揃え
+@mixin trans-xy($deg:0,$scale:1) {
+	top: 50%;
+	left: 50%;
+	transform:translate3d(-50%, -50%, 0) rotate(#{$deg}deg) scale($scale);
+}
+
+// 横中央揃え
+@mixin trans-x($deg:0,$scale:1) {
+	left: 50%;
+	transform: translate3d(-50%, 0, 0) rotate(#{$deg}deg) scale($scale);
+}
+
+// 縦中央揃え
+@mixin trans-y($deg:0,$scale:1) {
+	top: 50%;
+	transform: translate3d(0, -50%, 0) rotate(#{$deg}deg) scale($scale);
+}
+
+// rotate
+@mixin trans-rotate($deg-x:0,$deg-y:0) {
+	transform:rotate(#{$deg-x}deg);
+}
+
+// scale
+@mixin trans-scale($scale) {
+	transform:scale($scale);
+}
+
+// skew
+@mixin trans-skew($x, $y) {
+	transform:skew(#{$x}deg, #{$y}deg);
+}
+
+// transform reset
+@mixin trans-reset {
+	transform: none;
+	top: inherit;
+	left: inherit;
+}

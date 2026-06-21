@@ -1,0 +1,97 @@
+@use "../../_global/00-index" as *;
+.l-caseArchive {
+
+	&__keyVisual{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 40px;
+		gap: 20px;
+		@include mqd($md){
+			flex-wrap: wrap;
+			gap: 0;
+
+		}
+	}
+
+	&__interview{
+		width: 280px;
+		cursor: pointer;
+		@include shadow();
+		background: $white;
+		border-radius: 10px;
+		position: relative;
+		border: 1px solid $border-color;
+		padding: 15px;
+		@include flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+		@include mqd($md){
+			flex-direction: initial;
+			width: 100%;
+			max-width: 500px;
+			margin-top: -20px;
+			padding: 10px 15px;
+		}
+		&:before{
+			@include content(15px,15px,$primary_color);
+			border-radius: 5px 0 10px 0 ;
+			bottom:0;
+			right: 0;
+		}
+	}
+	&__interviewTitle{
+		text-align: center;
+		line-height: 1.2;
+		font-weight: 600;
+		font-size: 1.6rem;
+		@include mqd($md){
+			width: calc(70% - 15px);
+			text-align: left;
+		}
+	}
+	&__interviewImg{
+		display: block;
+		border-radius: 10px;
+		@include mqd($md){
+			width: 30%;
+		}
+
+	}
+
+
+	&__result{
+		text-align: right;
+		margin-top: 30px;
+		color: #343434;
+		font-size: 2.0rem;
+		@include mqd($md){
+			font-size: 1.6rem;
+		}
+	}
+
+	&__box{
+		@include flex;
+		gap:70px 20px;
+		padding-top: 20px;
+		@include mqd($md){
+			gap:40px 0;
+		}
+	}
+	&__boxItem {
+		@include gap(20px, 3);
+		box-sizing: border-box;
+		position: relative;
+		@include mqd($md-lg){
+			@include gap(20px, 2);
+		}
+		@include mqd($md){
+			width: 100%;
+		}
+
+	}
+
+
+}

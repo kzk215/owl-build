@@ -1,0 +1,6 @@
+@mixin dotted($bg_color,$color,$position:10,$size:20) {
+	background-color: $bg_color;
+	background-image: radial-gradient($color 20%, transparent 0), radial-gradient($color 20%, transparent 0);
+	background-position: 0 0, $position + px $position + px;
+	background-size: $size + px $size + px;
+}

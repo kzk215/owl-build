@@ -1,0 +1,20 @@
+@use "../_global/00-index" as *;
+
+.c-textLink {
+	line-height: 1.6;
+	width: fit-content;
+	border-bottom: 1px solid $primary_color;
+	color: $primary_color;
+	position: relative;
+	&[target="_blank"]{
+		padding-right: 1.3em;
+
+		&:before{
+			@include content(.8em,.8em);
+			@include icon(window,$primary_color);
+			top:.4em;
+			right: 0;
+		}
+	}
+
+}

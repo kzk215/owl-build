@@ -1,0 +1,62 @@
+@use "../_global/00-index" as *;
+.c-product{
+
+	&__box{
+		@include flex;
+		gap:30px 20px;
+		position: relative;
+		z-index: 4;
+		@include mqd($md){
+			gap: 20px 10px;
+		}
+	}
+	&__item{
+		@include gap(20px,5);
+		@include mqd($lg){
+			@include gap(20px,4);
+		}
+		@include mqd($md-lg){
+			@include gap(20px,3);
+		}
+		@include mqd($md){
+			@include gap(10px,2);
+		}
+	}
+	&__figure{
+		aspect-ratio: 113/65;
+		width: 100%;
+		display: block;
+		background: $white;
+		border-radius: 10px;
+		border:1px solid $border-color;
+		overflow: hidden;
+		position: relative;
+		&.--hidden:after{
+			@include content(100%,100%,$black);
+			opacity: .6;
+			@include trans-xy();
+		}
+	}
+
+	&__img{
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
+	}
+
+	&__title{
+		font-size: 1.8rem;
+		margin-top: .5em;
+		font-weight: 500;
+		letter-spacing: .1em;
+		line-height: 1.2;
+		@include mqd($md-lg){
+			font-size: 1.6rem;
+		}
+		@include mqd($md){
+			letter-spacing: 1px;
+			font-size: 1.4rem;
+		}
+	}
+}

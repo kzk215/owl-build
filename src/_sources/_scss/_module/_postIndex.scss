@@ -1,0 +1,128 @@
+@use "../_global/00-index" as *;
+.m-postIndex {
+	border-radius: 10px;
+	padding:15px 20px;
+	background: #F8FBFE;
+	border: 1px solid $border-color;
+	margin: 40px 0;
+	width: 100%;
+	@include flex;
+	@include mqd($md){
+		padding:5px 10px;
+		margin: 30px 0;
+	}
+	&__title{
+		font-size: 1.8rem;
+		font-weight: 500;
+		width: 80px;
+		padding:8px 10px;
+		position: relative;
+		@include mqd($md){
+			width: 100%;
+			cursor: pointer;
+
+		}
+	}
+	&__icon{
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 16px;
+		height: 16px;
+		display: none;
+		@include trans-y();
+		@include mqd($md){
+			display: block;
+		}
+
+		&:before,&:after{
+			@include content(100%,2px,$primary_color);
+			border-radius: 10px;
+		}
+		&:before {
+			@include trans-xy();
+		}
+		&:after{
+			@include trans-xy(90);
+		}
+	}
+	&__title.js-postIndex &__icon:after{
+		@include trans-xy();
+	}
+	&__title.js-postIndex + &__list{
+		display: flex;
+	}
+
+	&__list{
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		counter-reset: postIndex 0;
+		@include mqd($md){
+			width: 100%;
+			display: none;
+		}
+	}
+
+
+	&__listItem{
+		padding: 10px 20px 10px 30px;
+		border-bottom: 1px solid $border-color;
+		font-weight: 500;
+		position: relative;
+
+
+		@include mqd($md){
+			padding: 10px 20px 10px 30px;
+			gap: .6em;
+		}
+
+		&:before {
+			position: absolute;
+			right: calc(100% - 1.5em);
+			text-align: right;
+			font-weight: 400;
+			counter-increment: postIndex 1;
+			content: counter(postIndex) '.';
+		}
+		&:after{
+			@include content(10px,10px);
+			@include icon(arrow_sm,$primary_color);
+			@include trans-y(90);
+			right: 0;
+			@include mqd($md){
+				right: 5px;
+			}
+		}
+		&:last-child{
+			border-bottom: none;
+		}
+	}
+
+	&__listChild{
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		counter-reset: postChildIndex 0;
+	}
+	&__listChildItem{
+		padding: 10px 20px 10px 10px;
+		border-bottom: 1px solid $border-color;
+		margin-left: 10px;
+		font-size: 1.4rem;
+		position: relative;
+		&:before{
+			counter-increment: postChildIndex 1;
+			content: counter(postIndex)'-'counter(postChildIndex)'. ';
+		}
+		&:after{
+			@include content(10px,10px);
+			@include icon(arrow_sm,$primary_color);
+			@include trans-y(90);
+			right: 0;
+			@include mqd($md){
+				right: 5px;
+			}
+		}
+	}
+}
