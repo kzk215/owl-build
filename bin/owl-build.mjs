@@ -1,17 +1,36 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
-import degit from 'degit';
-import fs from 'fs-extra';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = (() => {
+  try {
+    return path.dirname(fileURLToPath(import.meta.url));
+  } catch (e) {
+    return process.cwd();
+  }
+})();
 
-// テンプレートリポジトリのパス（ユーザーの要望に合わせて適宜変更してください）
-// ここでは、現在のプロジェクトの構成をベースにしていると仮定します。
-const TEMPLATE_REPO = 'ka-z-u/owl-build'; // 仮のリポジトリ名
+// テンプレートリポジトリのパス
+const TEMPLATE_REPO_URL = 'https://github.com/kzk215/owl-build.git';
+
+function copyRecursiveSync(src, dest) {
+  const exists = fs.existsSync(src);
+  const stats = exists && fs.statSync(src);
+  const isDirectory = exists && stats.isDirectory();
+  if (isDirectory) {
+    if (!fs.existsSync(dest)) {
+      fs.mkdirSync(dest, { recursive: true });
+    }
+    fs.readdirSync(src).forEach((childItemName) => {
+      copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+    });
+  } else {
+    fs.copyFileSync(src, dest);
+  }
+}
 
 async function run() {
   const args = process.argv.slice(2);
@@ -49,58 +68,51 @@ async function run() {
       '.env-local'
     ];
 
-    // rootDir に設定ファイルを配置する
     if (useLocal) {
       console.log('Using local configuration files...');
       const projectRoot = path.resolve(__dirname, '..');
       for (const file of configFiles) {
         const localPath = path.join(projectRoot, file);
         const destPath = path.join(rootDir, file);
-        if (localPath !== destPath && await fs.exists(localPath)) {
-          await fs.copy(localPath, destPath);
+        if (localPath !== destPath && fs.existsSync(localPath)) {
+          copyRecursiveSync(localPath, destPath);
           console.log(`Copied local ${file} to root`);
         }
       }
     } else {
-      // 1. degitで設定ファイルを呼び出す
-      console.log(`Fetching configuration files from ${TEMPLATE_REPO}...`);
+      console.log(`Fetching configuration files from ${TEMPLATE_REPO_URL} via git...`);
       
+      const tempDir = path.join(rootDir, '.owl-build-temp');
+      if (fs.existsSync(tempDir)) {
+        fs.rmSync(tempDir, { recursive: true, force: true });
+      }
+
       try {
-        const emitter = degit(TEMPLATE_REPO, {
-          cache: false,
-          force: true,
-          verbose: true,
-        });
-
-        emitter.on('info', info => {
-          console.log(info.message);
-        });
-
-        const tempDir = path.join(rootDir, '.owl-build-temp');
-        await emitter.clone(tempDir);
+        // git clone を使用して取得（degit の代わり）
+        execSync(`git clone --depth 1 ${TEMPLATE_REPO_URL} "${tempDir}"`, { stdio: 'inherit' });
 
         for (const file of configFiles) {
           const srcPath = path.join(tempDir, file);
           const destPath = path.join(rootDir, file);
-          if (await fs.exists(srcPath)) {
-            await fs.copy(srcPath, destPath);
+          if (fs.existsSync(srcPath)) {
+            copyRecursiveSync(srcPath, destPath);
             console.log(`Copied ${file} to root`);
           }
         }
 
-        await fs.remove(tempDir);
-      } catch (degitErr) {
-        console.error('Error fetching from remote:', degitErr.message);
-        console.log('Tip: Use --local flag to use local configuration files if you are in the owl-build directory.');
+        fs.rmSync(tempDir, { recursive: true, force: true });
+      } catch (gitErr) {
+        console.error('Error fetching from git:', gitErr.message);
         process.exit(1);
       }
     }
 
-    // 2. wp/ディレクトリ内のものをsrc/に入れ
     console.log('Setting up WordPress theme in src/...');
-    if (await fs.exists(wpSourceDir)) {
-      await fs.ensureDir(srcDir);
-      await fs.copy(wpSourceDir, srcDir);
+    if (fs.existsSync(wpSourceDir)) {
+      if (!fs.existsSync(srcDir)) {
+        fs.mkdirSync(srcDir, { recursive: true });
+      }
+      copyRecursiveSync(wpSourceDir, srcDir);
       console.log('Copied wp/ contents to src/');
     } else {
       console.warn('Warning: wp/ directory not found in current directory');
