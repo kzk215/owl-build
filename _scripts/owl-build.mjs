@@ -99,8 +99,9 @@ async function run() {
           if (file === 'paths.mjs' && !isHtmlMode) {
             // WordPressモードの場合、paths.mjs 内のパスをテーマ名を含めたものに書き換える
             let content = fs.readFileSync(localPath, 'utf8');
-            content = content.replace(/SOURCES_REL = `src\/_sources`/, `SOURCES_REL = \`src/${themeName}/_sources\``);
-            content = content.replace(/ASSETS_REL = `src\/assets`/, `ASSETS_REL = \`src/${themeName}/assets\``);
+            // SOURCES_REL と ASSETS_REL の置換 (コロン形式と等号形式の両方に対応)
+            content = content.replace(/SOURCES_REL\s*[:=]\s*[`'"]src\/_sources[`'"]/, `SOURCES_REL: \`src/${themeName}/_sources\``);
+            content = content.replace(/ASSETS_REL\s*[:=]\s*[`'"]src\/assets[`'"]/, `ASSETS_REL: \`src/${themeName}/assets\``);
             fs.writeFileSync(destPath, content);
             console.log(`[Local] Created paths.mjs with theme path: src/${themeName}`);
           } else {
@@ -164,8 +165,9 @@ async function run() {
             if (file === 'paths.mjs' && !isHtmlMode) {
               // WordPressモードの場合、paths.mjs 内のパスをテーマ名を含めたものに書き換える
               let content = fs.readFileSync(srcPath, 'utf8');
-              content = content.replace(/SOURCES_REL = `src\/_sources`/, `SOURCES_REL = \`src/${themeName}/_sources\``);
-              content = content.replace(/ASSETS_REL = `src\/assets`/, `ASSETS_REL = \`src/${themeName}/assets\``);
+              // SOURCES_REL と ASSETS_REL の置換 (コロン形式と等号形式の両方に対応)
+              content = content.replace(/SOURCES_REL\s*[:=]\s*[`'"]src\/_sources[`'"]/, `SOURCES_REL: \`src/${themeName}/_sources\``);
+              content = content.replace(/ASSETS_REL\s*[:=]\s*[`'"]src\/assets[`'"]/, `ASSETS_REL: \`src/${themeName}/assets\``);
               fs.writeFileSync(destPath, content);
               console.log(`[Remote] Created paths.mjs with theme path: src/${themeName}`);
             } else {
