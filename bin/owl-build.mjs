@@ -106,6 +106,14 @@ async function run() {
           console.log(`[Local] Copied ${file} to root as ${destName}`);
         }
       }
+
+      // テンプレート内の src/ の中身を src/[themeName] にコピーする
+      const localSrcTemplateDir = path.join(projectRoot, 'src');
+      const themeDirInLocal = path.join(srcDir, themeName);
+      if (fs.existsSync(localSrcTemplateDir) && localSrcTemplateDir !== srcDir) {
+        copyRecursiveSync(localSrcTemplateDir, themeDirInLocal);
+        console.log(`[Local] Copied template src/ contents to ${themeDirInLocal}`);
+      }
     } else {
       console.log('Mode: Remote');
       console.log(`Template URL: ${TEMPLATE_REPO_URL}`);
@@ -139,6 +147,14 @@ async function run() {
             fs.copyFileSync(srcPath, destPath);
             console.log(`[Remote] Copied ${file} to root as ${destName}`);
           }
+        }
+
+        // テンプレート内の src/ の中身を src/[themeName] にコピーする
+        const tempSrcDir = path.join(tempDir, 'src');
+        const themeDirInRemote = path.join(srcDir, themeName);
+        if (fs.existsSync(tempSrcDir)) {
+          copyRecursiveSync(tempSrcDir, themeDirInRemote);
+          console.log(`[Remote] Copied template src/ contents to ${themeDirInRemote}`);
         }
 
         fs.rmSync(tempDir, { recursive: true, force: true });
