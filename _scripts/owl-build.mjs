@@ -317,7 +317,7 @@ async function run() {
 `);
 
 		console.log('\n\x1b[32m--- Setup completed successfully! ---\x1b[0m');
-		console.log(`\nNext steps:\n1. npm install\n2. npm run dev\n3.docker compose up -d\n`);
+		console.log(`\nNext steps:\n1. npm install\n2. npm run dev\n3. docker compose up -d\n`);
 
 	} catch (err) {
 		console.error('Error during setup:', err.message);
