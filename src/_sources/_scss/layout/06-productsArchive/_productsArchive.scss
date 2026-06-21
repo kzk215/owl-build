@@ -1,9 +1,0 @@
-@use "../../_global/00-index" as *;
-.l-productsArchive {
-	&__keyVisual{
-		@include flex;
-		justify-content: space-between;
-		align-items: center;
-		gap:0 20px;
-	}
-}

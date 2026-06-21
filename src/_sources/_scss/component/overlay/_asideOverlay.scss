@@ -1,9 +1,0 @@
-@use "../../_global/00-index" as *;
-.c-asideOverlay {
-	@include mqd($md-lg){
-		@include e-overlay;
-		background-color: rgba(#656565,.7);
-		z-index: 9997;
-	}
-
-}

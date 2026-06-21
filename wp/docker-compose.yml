@@ -1,35 +1,50 @@
 version: '3.3'
 
-services:
-   db:
-     image: mysql:8.4
-     restart: always
-     volumes:
-       - "./.data/db:/var/lib/mysql"
-     environment:
-       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-       - MYSQL_USER=${MYSQL_USER}
-       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-       - MYSQL_DATABASE=${MYSQL_DATABASE}
+x-wp-common: &wp-common
+  env_file: .env
+  volumes:
+    - "wordpress_data:/var/www/html"
+    - "./src/${THEME_NAME}:/var/www/html/wp-content/themes/${THEME_NAME}"
+    - "./uploads:/var/www/html/wp-content/uploads"
+    - "./plugins:/var/www/html/wp-content/plugins"
 
-   wordpress:
-     depends_on:
-       - db
-     image: wordpress:latest
-     volumes:
-       - "./uploads:/var/www/html/wp-content/uploads"
-       - "./src:/var/www/html/wp-content/themes/"${THEME_NAME}
-       - "./plugins:/var/www/html/wp-content/plugins"
-     ports:
-       - ${APACHE_HOST_PORT_80}:80
-     restart: always
-     environment:
-       - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
-       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
-       - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+services:
+  db:
+    image: mysql:8.4
+    restart: always
+    volumes:
+      - "./.data/db:/var/lib/mysql"
+    env_file: .env
+
+  wordpress:
+    <<: *wp-common
+    image: wordpress:latest
+    depends_on:
+      - db
+    ports:
+      - ${APACHE_HOST_PORT_80}:80
+    restart: always
+    environment:
+      WORDPRESS_CONFIG_EXTRA: define('WPLANG', 'ja');
+
+  wp-cli:
+    <<: *wp-common
+    image: wordpress:cli
+    user: root
+    depends_on:
+      - wordpress
+    command: >
+      /bin/sh -c '
+        until wp core is-installed --allow-root; do sleep 5; done
+        wp language core install ja --activate --allow-root
+        wp theme activate ${THEME_NAME} --allow-root
+      '
 
 #   mailcatcher:
 #     image: schickling/mailcatcher
 #     ports:
 #       - ${MAILCATCHER_PORT}:1080
 #       - ${SMTP_PORT}:1025
+
+volumes:
+  wordpress_data:

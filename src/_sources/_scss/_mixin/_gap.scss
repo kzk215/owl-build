@@ -1,4 +1,0 @@
-@mixin gap($gap:0px, $item:1) {
-  width: calc((100% / #{$item}) - ((#{$gap} * (#{$item} - 1)) / #{$item}));
-}
-

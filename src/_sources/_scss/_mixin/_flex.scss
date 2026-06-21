@@ -1,8 +1,0 @@
-@mixin flex {
-	display: flex;
-	flex-wrap: wrap;
-}
-
-@mixin flex-child($child-sell) {
-	width: calc(100% / #{$child-sell});
-}

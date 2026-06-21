@@ -1,8 +1,0 @@
-@mixin e-radio(){
-	input[type="radio"] {
-		display: none;
-		& + label {
-			cursor: pointer;
-		}
-	}
-}

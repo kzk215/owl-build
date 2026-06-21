@@ -1,9 +1,0 @@
-@use "../_global/00-index" as *;
-
-.p-page {
-	padding: 3rem 0 8rem;
-	position: relative;
-	@include mqd($md){
-		padding: 2rem 0 6rem;
-	}
-}
