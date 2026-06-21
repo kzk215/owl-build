@@ -54,7 +54,6 @@ async function run() {
 
   const rootDir = process.cwd();
   const srcDir = path.join(rootDir, 'src');
-  const wpSourceDir = path.join(rootDir, 'wp');
 
   try {
     const configFiles = [
@@ -107,13 +106,17 @@ async function run() {
       }
     }
 
-    console.log('Setting up WordPress theme in src/...');
+    // テーマディレクトリの決定 (src/theme-name)
+    const themeDir = path.join(srcDir, themeName);
+    const wpSourceDir = path.join(rootDir, 'wp');
+
+    console.log(`Setting up WordPress theme in src/${themeName}...`);
     if (fs.existsSync(wpSourceDir)) {
-      if (!fs.existsSync(srcDir)) {
-        fs.mkdirSync(srcDir, { recursive: true });
+      if (!fs.existsSync(themeDir)) {
+        fs.mkdirSync(themeDir, { recursive: true });
       }
-      copyRecursiveSync(wpSourceDir, srcDir);
-      console.log('Copied wp/ contents to src/');
+      copyRecursiveSync(wpSourceDir, themeDir);
+      console.log(`Copied wp/ contents to src/${themeName}`);
     } else {
       console.warn('Warning: wp/ directory not found in current directory');
     }
