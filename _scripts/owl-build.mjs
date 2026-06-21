@@ -96,8 +96,17 @@ async function run() {
         const destPath = path.join(rootDir, file);
         
         if (localPath !== destPath && fs.existsSync(localPath)) {
-          copyRecursiveSync(localPath, destPath);
-          console.log(`[Local] Copied ${file} to ${path.relative(rootDir, destPath)}`);
+          if (file === 'paths.mjs' && !isHtmlMode) {
+            // WordPressモードの場合、paths.mjs 内のパスをテーマ名を含めたものに書き換える
+            let content = fs.readFileSync(localPath, 'utf8');
+            content = content.replace(/SOURCES_REL = `src\/_sources`/, `SOURCES_REL = \`src/${themeName}/_sources\``);
+            content = content.replace(/ASSETS_REL = `src\/assets`/, `ASSETS_REL = \`src/${themeName}/assets\``);
+            fs.writeFileSync(destPath, content);
+            console.log(`[Local] Created paths.mjs with theme path: src/${themeName}`);
+          } else {
+            copyRecursiveSync(localPath, destPath);
+            console.log(`[Local] Copied ${file} to ${path.relative(rootDir, destPath)}`);
+          }
         }
       }
       
@@ -152,8 +161,17 @@ async function run() {
           const destPath = path.join(rootDir, file);
 
           if (fs.existsSync(srcPath)) {
-            copyRecursiveSync(srcPath, destPath);
-            console.log(`[Remote] Copied ${file} to ${path.relative(rootDir, destPath)}`);
+            if (file === 'paths.mjs' && !isHtmlMode) {
+              // WordPressモードの場合、paths.mjs 内のパスをテーマ名を含めたものに書き換える
+              let content = fs.readFileSync(srcPath, 'utf8');
+              content = content.replace(/SOURCES_REL = `src\/_sources`/, `SOURCES_REL = \`src/${themeName}/_sources\``);
+              content = content.replace(/ASSETS_REL = `src\/assets`/, `ASSETS_REL = \`src/${themeName}/assets\``);
+              fs.writeFileSync(destPath, content);
+              console.log(`[Remote] Created paths.mjs with theme path: src/${themeName}`);
+            } else {
+              copyRecursiveSync(srcPath, destPath);
+              console.log(`[Remote] Copied ${file} to ${path.relative(rootDir, destPath)}`);
+            }
           }
         }
 
