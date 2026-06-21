@@ -18,8 +18,9 @@ const TEMPLATE_REPO_URL = 'https://github.com/kzk215/owl-build.git';
 
 function copyRecursiveSync(src, dest) {
   const exists = fs.existsSync(src);
-  const stats = exists && fs.statSync(src);
-  const isDirectory = exists && stats.isDirectory();
+  if (!exists) return;
+  const stats = fs.statSync(src);
+  const isDirectory = stats.isDirectory();
   if (isDirectory) {
     if (!fs.existsSync(dest)) {
       fs.mkdirSync(dest, { recursive: true });
@@ -28,6 +29,11 @@ function copyRecursiveSync(src, dest) {
       copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
     });
   } else {
+    // ファイルをコピー。既存のファイルがある場合は上書き。
+    const destDir = path.dirname(dest);
+    if (!fs.existsSync(destDir)) {
+      fs.mkdirSync(destDir, { recursive: true });
+    }
     fs.copyFileSync(src, dest);
   }
 }
@@ -36,6 +42,10 @@ async function run() {
   const args = process.argv.slice(2);
   let themeName = null;
   let useLocal = false;
+
+  console.log('--- owl-build Debug Log ---');
+  console.log('Arguments:', args);
+  console.log('Current working directory:', process.cwd());
 
   // -wp または --wp の解析
   for (let i = 0; i < args.length; i++) {
@@ -68,18 +78,20 @@ async function run() {
     ];
 
     if (useLocal) {
-      console.log('Using local configuration files...');
+      console.log('Mode: Local');
       const projectRoot = path.resolve(__dirname, '..');
+      console.log('Project root (local):', projectRoot);
       for (const file of configFiles) {
         const localPath = path.join(projectRoot, file);
         const destPath = path.join(rootDir, file);
         if (localPath !== destPath && fs.existsSync(localPath)) {
           copyRecursiveSync(localPath, destPath);
-          console.log(`Copied local ${file} to root`);
+          console.log(`[Local] Copied ${file} to root`);
         }
       }
     } else {
-      console.log(`Fetching configuration files from ${TEMPLATE_REPO_URL} via git...`);
+      console.log('Mode: Remote');
+      console.log(`Template URL: ${TEMPLATE_REPO_URL}`);
       
       const tempDir = path.join(rootDir, '.owl-build-temp');
       if (fs.existsSync(tempDir)) {
@@ -87,7 +99,7 @@ async function run() {
       }
 
       try {
-        // git clone を使用して取得（degit の代わり）
+        console.log('Cloning template repository...');
         execSync(`git clone --depth 1 ${TEMPLATE_REPO_URL} "${tempDir}"`, { stdio: 'inherit' });
 
         for (const file of configFiles) {
@@ -95,39 +107,43 @@ async function run() {
           const destPath = path.join(rootDir, file);
           if (fs.existsSync(srcPath)) {
             copyRecursiveSync(srcPath, destPath);
-            console.log(`Copied ${file} to root`);
+            console.log(`[Remote] Copied ${file} to root`);
           }
         }
 
         fs.rmSync(tempDir, { recursive: true, force: true });
+        console.log('Cleaned up temporary directory.');
       } catch (gitErr) {
         console.error('Error fetching from git:', gitErr.message);
         process.exit(1);
       }
     }
 
-    // src ディレクトリの作成を確実にする
+    // テーマディレクトリの決定 (src/theme-name)
+    const themeDir = path.join(srcDir, themeName);
+    const wpSourceDir = path.join(rootDir, 'wp');
+
+    console.log(`Creating src directory: ${srcDir}`);
     if (!fs.existsSync(srcDir)) {
       fs.mkdirSync(srcDir, { recursive: true });
       console.log('Created src/ directory');
     }
 
-    // テーマディレクトリの決定 (src/theme-name)
-    const themeDir = path.join(srcDir, themeName);
-    const wpSourceDir = path.join(rootDir, 'wp');
-
-    console.log(`Setting up WordPress theme in src/${themeName}...`);
+    console.log(`Checking wp source directory: ${wpSourceDir}`);
     if (fs.existsSync(wpSourceDir)) {
+      console.log(`Target theme directory: ${themeDir}`);
       if (!fs.existsSync(themeDir)) {
         fs.mkdirSync(themeDir, { recursive: true });
+        console.log('Created theme directory');
       }
       copyRecursiveSync(wpSourceDir, themeDir);
-      console.log(`Copied wp/ contents to src/${themeName}`);
+      console.log(`Copied wp/ contents to ${themeDir}`);
     } else {
-      console.warn('Warning: wp/ directory not found in current directory');
+      console.warn(`Warning: wp/ directory not found at ${wpSourceDir}`);
     }
 
     console.log('Setup completed successfully!');
+    console.log('--- End of Debug Log ---');
 
   } catch (err) {
     console.error('Error during setup:', err.message);
