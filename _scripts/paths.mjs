@@ -9,8 +9,8 @@ const __dirname = path.dirname(__filename);
  * 初期設定
  * @type {string}
  */
-export const SOURCES_REL = `src/gojoh/_sources`; // ソース入力
-export const ASSETS_REL = `src/gojoh/assets`; // 出力
+export const SOURCES_REL = `src/_sources`; // ソース入力
+export const ASSETS_REL = `src/assets`; // 出力
 // export const VITE_HMR_PORT = '3080';
 
 // エントリーファイル名設定
