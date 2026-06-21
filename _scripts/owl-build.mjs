@@ -1,11 +1,18 @@
 #!/usr/bin/env node
 
+/**
+ * owl-build: WordPress および 静的HTML プロジェクトのセットアップスクリプト。
+ * テンプレートリポジトリから必要なファイルをコピーし、初期設定を行います。
+ */
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import readline from 'readline';
 
+// --- Constants & Globals ---
+const TEMPLATE_REPO_URL = 'https://github.com/kzk215/owl-build.git';
 const __dirname = (() => {
 	try {
 		return path.dirname(fileURLToPath(import.meta.url));
@@ -14,19 +21,35 @@ const __dirname = (() => {
 	}
 })();
 
-// テンプレートリポジトリのパス
-const TEMPLATE_REPO_URL = 'https://github.com/kzk215/owl-build.git';
+const CONFIG_FILES = [
+	'_scripts',
+	'paths.mjs',
+	'.gitignore',
+	'.stylelintrc.cjs',
+	'package.json',
+	'vite.config.mjs',
+	'README-BUILD.md',
+	'.env-local'
+];
 
+const DOCKER_FILES = ['docker-compose.yml', '.env-template'];
+
+// --- Utilities ---
+
+/**
+ * ディレクトリを再帰的にコピーする。
+ * @param {string} src - コピー元パス
+ * @param {string} dest - コピー先パス
+ * @param {string[]} excludeFiles - 除外するファイル名のリスト
+ */
 function copyRecursiveSync(src, dest, excludeFiles = []) {
-	const exists = fs.existsSync(src);
-	if (!exists) return;
+	if (!fs.existsSync(src)) return;
 
 	const fileName = path.basename(src);
 	if (excludeFiles.includes(fileName)) return;
 
 	const stats = fs.statSync(src);
-	const isDirectory = stats.isDirectory();
-	if (isDirectory) {
+	if (stats.isDirectory()) {
 		if (!fs.existsSync(dest)) {
 			fs.mkdirSync(dest, { recursive: true });
 		}
@@ -34,7 +57,6 @@ function copyRecursiveSync(src, dest, excludeFiles = []) {
 			copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName), excludeFiles);
 		});
 	} else {
-		// ファイルをコピー。既存のファイルがある場合は上書き。
 		const destDir = path.dirname(dest);
 		if (!fs.existsSync(destDir)) {
 			fs.mkdirSync(destDir, { recursive: true });
@@ -43,52 +65,77 @@ function copyRecursiveSync(src, dest, excludeFiles = []) {
 	}
 }
 
+/**
+ * 対話形式でユーザーに入力を求める。
+ * @param {string} query - 質問内容
+ * @returns {Promise<string>} ユーザーの入力内容
+ */
+async function askQuestion(query) {
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+	return new Promise((resolve) => {
+		rl.question(query, (answer) => {
+			rl.close();
+			resolve(answer.trim());
+		});
+	});
+}
+
+/**
+ * paths.mjs 内のテーマパスを更新する。
+ * @param {string} filePath - paths.mjs のパス
+ * @param {string} themeName - 設定するテーマ名
+ */
+function updatePathsMjs(filePath, themeName) {
+	if (!fs.existsSync(filePath)) return;
+	let content = fs.readFileSync(filePath, 'utf8');
+	content = content.replace(/SOURCES_REL\s*[:=]\s*[`'"]src\/_sources[`'"]/, `SOURCES_REL: \`src/${themeName}/_sources\``);
+	content = content.replace(/ASSETS_REL\s*[:=]\s*[`'"]src\/assets[`'"]/, `ASSETS_REL: \`src/${themeName}/assets\``);
+	fs.writeFileSync(filePath, content);
+}
+
+/**
+ * .env ファイルを作成し、THEME_NAME を設定する。
+ * @param {string} srcPath - .env-template のパス
+ * @param {string} destPath - 作成する .env のパス
+ * @param {string} themeName - 設定するテーマ名
+ * @param {boolean} isHtmlMode - HTMLモードかどうか
+ */
+function setupEnvFile(srcPath, destPath, themeName, isHtmlMode) {
+	if (!fs.existsSync(srcPath)) return;
+	let envContent = fs.readFileSync(srcPath, 'utf8');
+	const nameToSet = isHtmlMode ? 'static-html' : themeName;
+	envContent = envContent.replace(/THEME_NAME=.*/, `THEME_NAME=${nameToSet}`);
+	fs.writeFileSync(destPath, envContent);
+}
+
+// --- Main Logic ---
+
+/**
+ * メインの実行関数。
+ * 引数の解析からテンプレートの配置、初期設定までを行う。
+ */
 async function run() {
 	const args = process.argv.slice(2);
 	let themeName = null;
-	let useLocal = false;
-	let isHtmlMode = false;
+	let useLocal = args.includes('--local');
+	let isHtmlMode = args.includes('-html') || args.includes('--html');
+	let isWpMode = args.includes('-wp') || args.includes('--wp');
 
 	console.log('--- owl-build Debug Log ---');
 	console.log('Arguments:', args);
 	console.log('Current working directory:', process.cwd());
 
-	// オプションの解析
-	for (let i = 0; i < args.length; i++) {
-		if ((args[i] === '-wp' || args[i] === '--wp')) {
-			if (args[i + 1] && !args[i + 1].startsWith('-')) {
-				themeName = args[i + 1];
-				i++; // 次の引数をスキップ
-			} else {
-				// 次の引数がない、または別のオプションが来ている場合は、後で入力を促すためにフラグなどを立てる必要はない
-				// themeName は null のまま
-			}
+	// テーマ名の取得 (WPモード)
+	if (isWpMode) {
+		const wpIdx = args.findIndex(arg => arg === '-wp' || arg === '--wp');
+		if (args[wpIdx + 1] && !args[wpIdx + 1].startsWith('-')) {
+			themeName = args[wpIdx + 1];
+		} else {
+			themeName = await askQuestion('Enter theme name: ');
 		}
-		if (args[i] === '-html' || args[i] === '--html') {
-			isHtmlMode = true;
-		}
-		if (args[i] === '--local') {
-			useLocal = true;
-		}
-	}
-
-	// WordPressモードでテーマ名がない場合、対話形式で取得
-	if (!themeName && !isHtmlMode && args.some(arg => arg === '-wp' || arg === '--wp')) {
-		const rl = readline.createInterface({
-			input: process.stdin,
-			output: process.stdout
-		});
-
-		const askThemeName = () => {
-			return new Promise((resolve) => {
-				rl.question('Enter theme name: ', (answer) => {
-					resolve(answer.trim());
-				});
-			});
-		};
-
-		themeName = await askThemeName();
-		rl.close();
 
 		if (!themeName) {
 			console.error('Error: Theme name is required.');
@@ -96,7 +143,7 @@ async function run() {
 		}
 	}
 
-	if (!themeName && !isHtmlMode) {
+	if (!isHtmlMode && !isWpMode) {
 		console.log('Usage:');
 		console.log('  WordPress: owl-build -wp <theme-name> [--local]');
 		console.log('  Static HTML: owl-build -html [--local]');
@@ -105,234 +152,114 @@ async function run() {
 
 	const rootDir = process.cwd();
 	const srcDir = path.join(rootDir, 'src');
+	let templateDir = '';
+	let isTempDir = false;
 
 	try {
-		const configFiles = [
-			'_scripts',
-			'paths.mjs',
-			'.gitignore',
-			'.stylelintrc.cjs',
-			'package.json',
-			'vite.config.mjs',
-			'README-BUILD.md',
-			'.env-local'
-		];
-
+		// 1. テンプレートソースの準備
 		if (useLocal) {
 			console.log('Mode: Local');
-			const projectRoot = path.resolve(__dirname, '..');
-			console.log('Project root (local):', projectRoot);
-
-			// 先に WordPress/HTML のコンテンツをコピーする (上書きされないように)
-			const localWpDir = path.join(projectRoot, 'wp');
-			const localHtmlDir = path.join(projectRoot, 'html');
-			const sourceContentDir = isHtmlMode ? localHtmlDir : localWpDir;
-			const destContentDir = isHtmlMode ? srcDir : path.join(srcDir, themeName);
-
-			if (fs.existsSync(sourceContentDir) && sourceContentDir !== path.join(rootDir, isHtmlMode ? 'html' : 'wp')) {
-				console.log(`Copying template ${isHtmlMode ? 'html/' : 'wp/'} contents to ${destContentDir}...`);
-				copyRecursiveSync(sourceContentDir, destContentDir, ['docker-compose.yml', '.env-template', 'docker']);
-			}
-
-			for (const file of configFiles) {
-				const localPath = path.join(projectRoot, file);
-				const destPath = path.join(rootDir, file);
-
-				if (localPath !== destPath && fs.existsSync(localPath)) {
-					if (file === 'paths.mjs' && !isHtmlMode) {
-						// WordPressモードの場合、paths.mjs 内のパスをテーマ名を含めたものに書き換える
-						let content = fs.readFileSync(localPath, 'utf8');
-						// SOURCES_REL と ASSETS_REL の置換 (コロン形式と等号形式の両方に対応)
-						content = content.replace(/SOURCES_REL\s*[:=]\s*[`'"]src\/_sources[`'"]/, `SOURCES_REL: \`src/${themeName}/_sources\``);
-						content = content.replace(/ASSETS_REL\s*[:=]\s*[`'"]src\/assets[`'"]/, `ASSETS_REL: \`src/${themeName}/assets\``);
-						fs.writeFileSync(destPath, content);
-						console.log(`[Local] Created paths.mjs with theme path: src/${themeName}`);
-					} else {
-						copyRecursiveSync(localPath, destPath);
-						console.log(`[Local] Copied ${file} to ${path.relative(rootDir, destPath)}`);
-					}
-				}
-			}
-
-			// wp/ または html/ 内の Docker 関連ファイルをルートにコピー
-			const sourceDockerDir = isHtmlMode ? localHtmlDir : localWpDir;
-
-			const dockerFiles = ['docker-compose.yml', '.env-template'];
-			for (const file of dockerFiles) {
-				const srcPath = path.join(sourceDockerDir, file);
-				if (fs.existsSync(srcPath)) {
-					const destName = (file === '.env-template') ? '.env' : file;
-					const destPath = path.join(rootDir, destName);
-
-					if (file === '.env-template') {
-						// .env-template を読み込んで THEME_NAME を自動設定
-						let envContent = fs.readFileSync(srcPath, 'utf8');
-						const nameToSet = isHtmlMode ? 'static-html' : themeName;
-						envContent = envContent.replace(/THEME_NAME=.*/, `THEME_NAME=${nameToSet}`);
-						fs.writeFileSync(destPath, envContent);
-						console.log(`[Local] Created .env and set THEME_NAME=${nameToSet}`);
-					} else {
-						fs.copyFileSync(srcPath, destPath);
-						console.log(`[Local] Copied ${file} to root`);
-					}
-				}
-			}
-
-			// テンプレート内の src/ の中身をテーマディレクトリまたは src 直下にコピーする
-			const localSrcTemplateDir = path.join(projectRoot, 'src');
-			const destSrcDir = isHtmlMode ? srcDir : path.join(srcDir, themeName);
-			if (fs.existsSync(localSrcTemplateDir) && localSrcTemplateDir !== srcDir) {
-				copyRecursiveSync(localSrcTemplateDir, destSrcDir);
-				console.log(`[Local] Copied template src/ contents to ${destSrcDir}`);
-			}
+			templateDir = path.resolve(__dirname, '..');
 		} else {
 			console.log('Mode: Remote');
-			console.log(`Template URL: ${TEMPLATE_REPO_URL}`);
-
-			const tempDir = path.join(rootDir, '.owl-build-temp');
-			if (fs.existsSync(tempDir)) {
-				fs.rmSync(tempDir, { recursive: true, force: true });
+			templateDir = path.join(rootDir, '.owl-build-temp');
+			isTempDir = true;
+			if (fs.existsSync(templateDir)) {
+				fs.rmSync(templateDir, { recursive: true, force: true });
 			}
+			console.log(`Cloning template repository from ${TEMPLATE_REPO_URL}...`);
+			execSync(`git clone --depth 1 ${TEMPLATE_REPO_URL} "${templateDir}"`, { stdio: 'inherit' });
+		}
 
-			try {
-				console.log('Cloning template repository...');
-				execSync(`git clone --depth 1 ${TEMPLATE_REPO_URL} "${tempDir}"`, { stdio: 'inherit' });
+		const templateWpDir = path.join(templateDir, 'wp');
+		const templateHtmlDir = path.join(templateDir, 'html');
+		const templateSrcBaseDir = path.join(templateDir, 'src');
 
-				// 先に WordPress/HTML のコンテンツをコピーする (上書きされないように)
-				const tempWpDir = path.join(tempDir, 'wp');
-				const tempHtmlDir = path.join(tempDir, 'html');
-				const sourceContentDir = isHtmlMode ? tempHtmlDir : tempWpDir;
-				const destContentDir = isHtmlMode ? srcDir : path.join(srcDir, themeName);
+		const sourceContentDir = isHtmlMode ? templateHtmlDir : templateWpDir;
+		const targetSrcDir = isHtmlMode ? srcDir : path.join(srcDir, themeName);
 
-				if (fs.existsSync(sourceContentDir)) {
-					console.log(`Copying template ${isHtmlMode ? 'html/' : 'wp/'} contents to ${destContentDir}...`);
-					copyRecursiveSync(sourceContentDir, destContentDir, ['docker-compose.yml', '.env-template', 'docker']);
+		// 2. 基本コンテンツのコピー (template/{wp,html} -> src/)
+		if (fs.existsSync(sourceContentDir) && sourceContentDir !== path.join(rootDir, isHtmlMode ? 'html' : 'wp')) {
+			console.log(`Copying template ${isHtmlMode ? 'html/' : 'wp/'} contents...`);
+			copyRecursiveSync(sourceContentDir, targetSrcDir, ['docker-compose.yml', '.env-template', 'docker']);
+		}
+
+		// 3. 設定ファイルの配置
+		for (const file of CONFIG_FILES) {
+			const srcPath = path.join(templateDir, file);
+			const destPath = path.join(rootDir, file);
+			if (srcPath !== destPath && fs.existsSync(srcPath)) {
+				if (file === 'paths.mjs' && isWpMode) {
+					fs.copyFileSync(srcPath, destPath);
+					updatePathsMjs(destPath, themeName);
+					console.log(`Created paths.mjs with theme path: src/${themeName}`);
+				} else {
+					copyRecursiveSync(srcPath, destPath);
+					console.log(`Copied ${file} to project root`);
 				}
-
-				for (const file of configFiles) {
-					const srcPath = path.join(tempDir, file);
-					const destPath = path.join(rootDir, file);
-
-					if (fs.existsSync(srcPath)) {
-						if (file === 'paths.mjs' && !isHtmlMode) {
-							// WordPressモードの場合、paths.mjs 内のパスをテーマ名を含めたものに書き換える
-							let content = fs.readFileSync(srcPath, 'utf8');
-							// SOURCES_REL と ASSETS_REL の置換 (コロン形式と等号形式の両方に対応)
-							content = content.replace(/SOURCES_REL\s*[:=]\s*[`'"]src\/_sources[`'"]/, `SOURCES_REL: \`src/${themeName}/_sources\``);
-							content = content.replace(/ASSETS_REL\s*[:=]\s*[`'"]src\/assets[`'"]/, `ASSETS_REL: \`src/${themeName}/assets\``);
-							fs.writeFileSync(destPath, content);
-							console.log(`[Remote] Created paths.mjs with theme path: src/${themeName}`);
-						} else {
-							copyRecursiveSync(srcPath, destPath);
-							console.log(`[Remote] Copied ${file} to ${path.relative(rootDir, destPath)}`);
-						}
-					}
-				}
-
-				// wp/ または html/ 内の Docker 関連ファイルをルートにコピー
-				const sourceDockerDir = isHtmlMode ? tempHtmlDir : tempWpDir;
-
-				const dockerFiles = ['docker-compose.yml', '.env-template'];
-				for (const file of dockerFiles) {
-					const srcPath = path.join(sourceDockerDir, file);
-					if (fs.existsSync(srcPath)) {
-						const destName = (file === '.env-template') ? '.env' : file;
-						const destPath = path.join(rootDir, destName);
-
-						if (file === '.env-template') {
-							// .env-template を読み込んで THEME_NAME を自動設定
-							let envContent = fs.readFileSync(srcPath, 'utf8');
-							const nameToSet = isHtmlMode ? 'static-html' : themeName;
-							envContent = envContent.replace(/THEME_NAME=.*/, `THEME_NAME=${nameToSet}`);
-							fs.writeFileSync(destPath, envContent);
-							console.log(`[Remote] Created .env and set THEME_NAME=${nameToSet}`);
-						} else {
-							fs.copyFileSync(srcPath, destPath);
-							console.log(`[Remote] Copied ${file} to root`);
-						}
-					}
-				}
-
-				// テンプレート内の src/ の中身をテーマディレクトリまたは src 直下にコピーする
-				const tempSrcDir = path.join(tempDir, 'src');
-				const destSrcDir = isHtmlMode ? srcDir : path.join(srcDir, themeName);
-				if (fs.existsSync(tempSrcDir)) {
-					copyRecursiveSync(tempSrcDir, destSrcDir);
-					console.log(`[Remote] Copied template src/ contents to ${destSrcDir}`);
-				}
-
-				fs.rmSync(tempDir, { recursive: true, force: true });
-				console.log('Cleaned up temporary directory.');
-			} catch (gitErr) {
-				console.error('Error fetching from git:', gitErr.message);
-				process.exit(1);
 			}
 		}
 
-		// --- 各モード固有の追加処理 ---
+		// 4. Docker関連ファイルの配置
+		for (const file of DOCKER_FILES) {
+			const srcPath = path.join(sourceContentDir, file);
+			if (fs.existsSync(srcPath)) {
+				const destName = (file === '.env-template') ? '.env' : file;
+				const destPath = path.join(rootDir, destName);
+				if (file === '.env-template') {
+					setupEnvFile(srcPath, destPath, themeName, isHtmlMode);
+					console.log(`Created .env and set THEME_NAME`);
+				} else {
+					fs.copyFileSync(srcPath, destPath);
+					console.log(`Copied ${file} to project root`);
+				}
+			}
+		}
+
+		// 5. テンプレート src/ の中身を同期
+		if (fs.existsSync(templateSrcBaseDir) && templateSrcBaseDir !== srcDir) {
+			copyRecursiveSync(templateSrcBaseDir, targetSrcDir);
+			console.log(`Copied template src/ contents to ${targetSrcDir}`);
+		}
+
+		// 6. ローカルの wp/ or html/ ディレクトリがある場合の追加同期
+		const localSourceDir = path.join(rootDir, isHtmlMode ? 'html' : 'wp');
+		if (fs.existsSync(localSourceDir)) {
+			console.log(`Syncing local ${isHtmlMode ? 'html/' : 'wp/'} directory...`);
+			copyRecursiveSync(localSourceDir, targetSrcDir, ['docker', 'docker-compose.yml', '.env-template']);
+		}
+
+		// 7. モード別の最終調整
 		if (isHtmlMode) {
-			console.log('Setting up Static HTML environment...');
-			if (!fs.existsSync(srcDir)) {
-				fs.mkdirSync(srcDir, { recursive: true });
-			}
-
-			// カレントディレクトリの html/ ディレクトリの内容を src/ にコピー（Docker関連ファイルは除外）
-			const htmlSourceDir = path.join(rootDir, 'html');
-			if (fs.existsSync(htmlSourceDir)) {
-				copyRecursiveSync(htmlSourceDir, srcDir, ['docker', 'docker-compose.yml', '.env-template']);
-				console.log('Copied local html/ contents to src/ (excluding Docker config)');
-			}
-
-			// 必要ならデフォルトの index.html を生成
+			if (!fs.existsSync(srcDir)) fs.mkdirSync(srcDir, { recursive: true });
 			const indexHtml = path.join(srcDir, 'index.html');
 			if (!fs.existsSync(indexHtml)) {
 				fs.writeFileSync(indexHtml, '<!DOCTYPE html>\n<html>\n<head><title>Static HTML</title></head>\n<body><h1>Hello Static HTML</h1></body>\n</html>');
 				console.log('Created default index.html');
 			}
 		} else {
-			// WordPress モードの既存処理
-			// テーマディレクトリの決定 (src/theme-name)
-			const themeDir = path.join(srcDir, themeName);
-			const wpSourceDir = path.join(rootDir, 'wp');
-
-			console.log(`Creating src directory: ${srcDir}`);
-			if (!fs.existsSync(srcDir)) {
-				fs.mkdirSync(srcDir, { recursive: true });
-				console.log('Created src/ directory');
+			// 最小限の WP テーマファイル (もし存在しなければ)
+			if (!fs.existsSync(path.join(targetSrcDir, 'style.css')) && !fs.existsSync(path.join(targetSrcDir, 'index.php'))) {
+				console.log('Creating minimal WordPress theme files...');
+				if (!fs.existsSync(targetSrcDir)) fs.mkdirSync(targetSrcDir, { recursive: true });
+				fs.writeFileSync(path.join(targetSrcDir, 'style.css'), `/*\nTheme Name: ${themeName}\nAuthor: owl-build\nVersion: 1.0.0\n*/`);
+				fs.writeFileSync(path.join(targetSrcDir, 'index.php'), `<?php\n// Generated by owl-build\n?>`);
 			}
+		}
 
-			console.log(`Checking local wp source directory: ${wpSourceDir}`);
-			if (fs.existsSync(wpSourceDir)) {
-				console.log(`Target theme directory: ${themeDir}`);
-				if (!fs.existsSync(themeDir)) {
-					fs.mkdirSync(themeDir, { recursive: true });
-					console.log('Created theme directory');
-				}
-				// カレントディレクトリの wp/ の内容を src/theme-name/ にコピー
-				// Docker 関連ファイルは src 内にはコピーせず、ルートのみに配置する
-				copyRecursiveSync(wpSourceDir, themeDir, ['docker-compose.yml', '.env-template', 'docker']);
-				console.log(`Copied local wp/ contents to ${themeDir} (excluding Docker config)`);
-			} else {
-				// すでにコピーされているか確認（テンプレートからコピーされている可能性がある）
-				if (!fs.existsSync(path.join(themeDir, 'style.css')) && !fs.existsSync(path.join(themeDir, 'index.php'))) {
-					console.log(`Local wp/ directory not found and minimal files missing. Creating minimal theme files in ${themeDir}...`);
-					if (!fs.existsSync(themeDir)) {
-						fs.mkdirSync(themeDir, { recursive: true });
-					}
-					// 最小限の WordPress テーマファイルを生成
-					fs.writeFileSync(path.join(themeDir, 'style.css'), `/*\nTheme Name: ${themeName}\nAuthor: owl-build\nVersion: 1.0.0\n*/`);
-					fs.writeFileSync(path.join(themeDir, 'index.php'), `<?php\n// Generated by owl-build\n?>`);
-					console.log('Created minimal style.css and index.php');
-				}
-			}
+		if (isTempDir) {
+			fs.rmSync(templateDir, { recursive: true, force: true });
+			console.log('Cleaned up temporary directory.');
 		}
 
 		console.log('\n--- Setup completed successfully! ---');
 		console.log(`\nNext steps:\n1. cd ${path.basename(rootDir)}\n2. npm install\n3. npm run dev\n`);
-		console.log('--- End of Debug Log ---');
 
 	} catch (err) {
 		console.error('Error during setup:', err.message);
+		if (isTempDir && fs.existsSync(templateDir)) {
+			fs.rmSync(templateDir, { recursive: true, force: true });
+		}
 		process.exit(1);
 	}
 }
