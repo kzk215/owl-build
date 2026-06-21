@@ -16,9 +16,13 @@ const __dirname = (() => {
 // テンプレートリポジトリのパス
 const TEMPLATE_REPO_URL = 'https://github.com/kzk215/owl-build.git';
 
-function copyRecursiveSync(src, dest) {
+function copyRecursiveSync(src, dest, excludeFiles = []) {
   const exists = fs.existsSync(src);
   if (!exists) return;
+  
+  const fileName = path.basename(src);
+  if (excludeFiles.includes(fileName)) return;
+
   const stats = fs.statSync(src);
   const isDirectory = stats.isDirectory();
   if (isDirectory) {
@@ -26,7 +30,7 @@ function copyRecursiveSync(src, dest) {
       fs.mkdirSync(dest, { recursive: true });
     }
     fs.readdirSync(src).forEach((childItemName) => {
-      copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+      copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName), excludeFiles);
     });
   } else {
     // ファイルをコピー。既存のファイルがある場合は上書き。
@@ -89,6 +93,19 @@ async function run() {
           console.log(`[Local] Copied ${file} to root`);
         }
       }
+      
+      // wp/ 内の Docker 関連ファイルをルートにコピー
+      const localWpDir = path.join(projectRoot, 'wp');
+      const dockerFiles = ['docker-compose.yml', '.env-template'];
+      for (const file of dockerFiles) {
+        const srcPath = path.join(localWpDir, file);
+        if (fs.existsSync(srcPath)) {
+          const destName = (file === '.env-template') ? '.env' : file;
+          const destPath = path.join(rootDir, destName);
+          fs.copyFileSync(srcPath, destPath);
+          console.log(`[Local] Copied ${file} to root as ${destName}`);
+        }
+      }
     } else {
       console.log('Mode: Remote');
       console.log(`Template URL: ${TEMPLATE_REPO_URL}`);
@@ -108,6 +125,19 @@ async function run() {
           if (fs.existsSync(srcPath)) {
             copyRecursiveSync(srcPath, destPath);
             console.log(`[Remote] Copied ${file} to root`);
+          }
+        }
+
+        // wp/ 内の Docker 関連ファイルをルートにコピー
+        const tempWpDir = path.join(tempDir, 'wp');
+        const dockerFiles = ['docker-compose.yml', '.env-template'];
+        for (const file of dockerFiles) {
+          const srcPath = path.join(tempWpDir, file);
+          if (fs.existsSync(srcPath)) {
+            const destName = (file === '.env-template') ? '.env' : file;
+            const destPath = path.join(rootDir, destName);
+            fs.copyFileSync(srcPath, destPath);
+            console.log(`[Remote] Copied ${file} to root as ${destName}`);
           }
         }
 
@@ -136,8 +166,9 @@ async function run() {
         fs.mkdirSync(themeDir, { recursive: true });
         console.log('Created theme directory');
       }
-      copyRecursiveSync(wpSourceDir, themeDir);
-      console.log(`Copied wp/ contents to ${themeDir}`);
+      // Docker 関連ファイルは src 内にはコピーせず、ルートのみに配置する
+      copyRecursiveSync(wpSourceDir, themeDir, ['docker-compose.yml', '.env-template']);
+      console.log(`Copied wp/ contents to ${themeDir} (excluding Docker config)`);
     } else {
       console.log(`wp/ directory not found. Creating minimal theme files in ${themeDir}...`);
       if (!fs.existsSync(themeDir)) {
