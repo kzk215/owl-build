@@ -106,6 +106,12 @@ async function run() {
       }
     }
 
+    // src ディレクトリの作成を確実にする
+    if (!fs.existsSync(srcDir)) {
+      fs.mkdirSync(srcDir, { recursive: true });
+      console.log('Created src/ directory');
+    }
+
     // テーマディレクトリの決定 (src/theme-name)
     const themeDir = path.join(srcDir, themeName);
     const wpSourceDir = path.join(rootDir, 'wp');
