@@ -3,6 +3,7 @@ import {defineConfig} from "vite";
 import path from "node:path";
 import {dedupeDecls, addCharset, stripImageUrls} from "./_scripts/lib/postcss-plugins.mjs";
 import {generateSassSourcemap} from "./_scripts/lib/vite-plugins.mjs";
+import {sassIndexGenerator} from "./_scripts/lib/sass-index-generator.mjs";
 import autoprefixer from "autoprefixer";
 import sortMediaQueries from "postcss-sort-media-queries";
 import cssnano from "cssnano";
@@ -75,12 +76,16 @@ export default defineConfig(({mode}) => {
 	const paths = resolveTargetPaths(targetName);
 
 	return {
-		plugins: [generateSassSourcemap()],
+		plugins: [
+			sassIndexGenerator(),
+			generateSassSourcemap()
+		],
 
 		css: {
 			preprocessorOptions: {scss: {api: "modern-compiler"}},
 			postcss: {plugins: postcssPlugins},
 			devSourcemap: true,
+			url: false,
 		},
 
 		build: {

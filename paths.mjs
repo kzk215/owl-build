@@ -68,6 +68,9 @@ export const INPUT_JS_DIR = `_js`;
 export const OUTPUT_CSS_DIR = `css`;
 export const OUTPUT_JS_DIR = `js`;
 export const EXCLUDE_IMG_DIR = `img`;
+export const INPUT_ICONS_DIR = `_icons`;
+export const OUTPUT_ICONS_DIR = `icons`;
+export const ICONS_SPRITE_FILE = `icons.svg`;
 
 /* -------------------------------------------- */
 
@@ -102,6 +105,8 @@ export function resolveTargetPaths(targetName) {
 	const JS_INPUT_ABS = path.resolve(ROOT, JS_INPUT_REL);
 	const JS_ABS = path.resolve(ROOT, JS_REL);
 	const CSS_ABS = path.resolve(ROOT, CSS_REL);
+	const ICONS_ABS = path.resolve(ASSETS_ABS, OUTPUT_ICONS_DIR);
+	const ICONS_SPRITE_ABS = path.resolve(ASSETS_ABS, OUTPUT_ICONS_DIR, ICONS_SPRITE_FILE);
 
 	const ENTRY = {
 		scss: path.resolve(SCSS_ABS, entryScssFile),
@@ -120,7 +125,7 @@ export function resolveTargetPaths(targetName) {
 		target: targetName,
 		SOURCES_REL, ASSETS_REL,
 		SCSS_REL, JS_INPUT_REL, CSS_REL, JS_REL,
-		SOURCES_ABS, ASSETS_ABS, SCSS_ABS, JS_INPUT_ABS, JS_ABS, CSS_ABS,
+		SOURCES_ABS, ASSETS_ABS, SCSS_ABS, JS_INPUT_ABS, JS_ABS, CSS_ABS, ICONS_ABS, ICONS_SPRITE_ABS,
 		ENTRY, OUT, STYLELINT_GLOB,
 		minify,
 		sourcemap,
@@ -143,6 +148,8 @@ export const SCSS_ABS = _p.SCSS_ABS;
 export const JS_INPUT_ABS = _p.JS_INPUT_ABS;
 export const JS_ABS = _p.JS_ABS;
 export const CSS_ABS = _p.CSS_ABS;
+export const ICONS_ABS = _p.ICONS_ABS;
+export const ICONS_SPRITE_ABS = _p.ICONS_SPRITE_ABS;
 export const ENTRY = _p.ENTRY;
 export const OUT = _p.OUT;
 // stylelint 用（OS差を潰す）
