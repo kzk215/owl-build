@@ -1,0 +1,19 @@
+{
+    "name": "acf/customBtn",
+    "title": "ボタン BLOCK",
+    "description": "お問い合わせ・ショールームボタン用ブロック",
+    "category": "hp-original",
+    "icon": "button",
+    "keywords": ["button", "contact", "showroom"],
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "render.php"
+    },
+    "supports": {
+        "align": true,
+        "mode": false,
+        "jsx": true,
+        "multiple": true
+    },
+    "postTypes": ["column", "post", "page"]
+}
