@@ -1,0 +1,6 @@
+//フォントサイズ
+@mixin font-size($size: 1.6rem,$spSize:1.5rem) {
+	@include mqd($md){
+
+	}
+}

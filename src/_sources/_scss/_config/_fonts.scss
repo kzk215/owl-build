@@ -4,8 +4,7 @@
 $font-dir : "../../assets/fonts";
 @mixin fo-min {
 	//ヒラギノ明朝
-	font-family: 'Noto Serif JP',"ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
-
+	font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
 	//遊明朝
 	//font-family: "Yu Mincho", "YuMincho",'Sawarabi Mincho',"ヒラギノ明朝 ProN W6", "HiraMinProN-W6", serif;
 }
@@ -25,11 +24,10 @@ $font-dir : "../../assets/fonts";
 	font-family: "Zen Kaku Gothic New", sans-serif;
 	font-style: normal;
 }
-
 @mixin web-font02 {
 	font-family: "Barlow", sans-serif;
 	font-style: normal;
 }
 @mixin web-font03 {
-	//font-family: 'futura-condensed-bold', sans-serif;
+	font-family: 'futura-condensed-bold', sans-serif;
 }

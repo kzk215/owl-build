@@ -1,11 +1,8 @@
-// COMMON
-@forward "00-stracture/header";
 @forward "00-stracture/cta";
 @forward "00-stracture/footer";
 @forward "00-stracture/globalNav";
+@forward "00-stracture/header";
 @forward "00-stracture/sideMenu";
-
-// TOP
 @forward "01-top/keyVisual";
 @forward "01-top/topAbout";
 @forward "01-top/topCase";
@@ -14,40 +11,3 @@
 @forward "01-top/topIntro";
 @forward "01-top/topProduct";
 @forward "01-top/topShowroom";
-// CONCEPT
-@forward "02-concept/_conceptKeyVisual";
-@forward "02-concept/_conceptIntro";
-@forward "02-concept/_conceptService";
-
-// COLUMN
-@forward "03-column/_columnArchive";
-@forward "03-column/_columnSingle";
-@forward "03-column/_columnRelated";
-
-// CASE
-@forward "04-case/_caseArchive";
-@forward "04-case/_caseSingle";
-@forward "04-case/_caseSingleArticle";
-@forward "04-case/_caseSingleFaq";
-
-@forward "05-showroom/_showroomKeyVisual";
-@forward "05-showroom/_showroomRecommend";
-@forward "05-showroom/_showroomIntro";
-@forward "05-showroom/_showroomFlow";
-@forward "05-showroom/_showroomMap";
-
-@forward "06-productsArchive/_productsArchive";
-@forward "06-productsArchive/_productsArchiveIntro";
-@forward "06-productsArchive/_productsArchiveWorries";
-@forward "06-productsArchive/_productsArchiveRole";
-
-@forward "07-productsSingle/_productsSingle";
-@forward "07-productsSingle/_productsSingleKeyVisual";
-@forward "07-productsSingle/_productsSingleLocalNav";
-@forward "07-productsSingle/_productsSingleWorries";
-@forward "07-productsSingle/_productsSingleVoice";
-@forward "07-productsSingle/_productsSingleDetail";
-@forward "07-productsSingle/_productsSingleFaq";
-@forward "07-productsSingle/_productsSingleLink";
-
-@forward "08-contact/_contact";
