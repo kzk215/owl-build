@@ -75,8 +75,8 @@
 		}
 		&:before{
 			@include content(34px,34px);
-			@include icon(arrow_bottom,$primary_color);
-			@include trans-x();
+			@include icon(arrow,$primary_color);
+			@include trans-x(90);
 			top:calc(100% - 10px);
 			left: calc(50% - 80px);
 			@include mqd($md-lg){

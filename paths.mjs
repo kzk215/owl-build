@@ -68,7 +68,6 @@ export const INPUT_JS_DIR = `_js`;
 export const OUTPUT_CSS_DIR = `css`;
 export const OUTPUT_JS_DIR = `js`;
 export const EXCLUDE_IMG_DIR = `img`;
-export const INPUT_ICONS_DIR = `_icons`;
 export const OUTPUT_ICONS_DIR = `icons`;
 export const ICONS_SPRITE_FILE = `icons.svg`;
 

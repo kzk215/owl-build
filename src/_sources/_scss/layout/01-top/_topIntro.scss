@@ -71,8 +71,8 @@
 
 		&:before{
 			@include content(20px,28px);
-			@include icon(arrow_bottom);
-			@include trans-x();
+			@include icon(arrow);
+			@include trans-x(90);
 			top:calc(100% + 20px);
 		}
 	}

@@ -1,0 +1,13 @@
+@use "../../_global/00-index" as *;
+
+.c-textLead {
+	line-height: 2.5;
+	text-align: center;
+	color: #093F7A;
+	font-size: 2.0rem;
+	font-weight: 500;
+	@include mqd($md){
+		text-align: left;
+		font-size: 1.7rem;
+	}
+}

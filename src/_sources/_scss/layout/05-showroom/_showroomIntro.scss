@@ -126,7 +126,7 @@
 		}
 		&:before{
 			@include content(60px,60px);
-			@include icon('light');
+			@include icon('ranking');
 			left: -5px;
 			top:-20px;
 			@include mqd($md){

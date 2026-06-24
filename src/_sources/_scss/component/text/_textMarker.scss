@@ -1,0 +1,12 @@
+@use "../../_global/00-index" as *;
+.c-textMarker {
+	position: relative;
+
+	&:before {
+		@include content(0, 100%, #F2F7A7);
+		left: 0;
+		transition: width 0.3s 0.4s ease-in;
+		@include trans-y();
+		z-index: -1;
+	}
+}

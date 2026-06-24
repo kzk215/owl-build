@@ -3298,34 +3298,6 @@ var Swiper = class Swiper {
 		if (swiper.params.init) swiper.init();
 		return swiper;
 	}
-
-	static get extendedDefaults() {
-		return extendedDefaults;
-	}
-
-	static get defaults() {
-		return defaults;
-	}
-
-	static extendDefaults(newDefaults) {
-		extend(extendedDefaults, newDefaults);
-	}
-
-	static installModule(mod) {
-		if (!Swiper.prototype.__modules__) Swiper.prototype.__modules__ = [];
-		const modules = Swiper.prototype.__modules__;
-		if (typeof mod === "function" && modules.indexOf(mod) < 0) modules.push(mod);
-	}
-
-	static use(module) {
-		if (Array.isArray(module)) {
-			module.forEach((m) => Swiper.installModule(m));
-			return Swiper;
-		}
-		Swiper.installModule(module);
-		return Swiper;
-	}
-
 	getDirectionLabel(property) {
 		if (this.isHorizontal()) return property;
 		return {
@@ -3339,17 +3311,14 @@ var Swiper = class Swiper {
 			"marginRight": "marginBottom"
 		}[property];
 	}
-
 	getSlideIndex(slideEl) {
 		const { slidesEl, params } = this;
 		const firstSlideIndex = elementIndex(elementChildren(slidesEl, `.${params.slideClass}, swiper-slide`)[0]);
 		return elementIndex(slideEl) - firstSlideIndex;
 	}
-
 	getSlideIndexByData(index) {
 		return this.getSlideIndex(this.slides.find((slideEl) => slideEl.getAttribute("data-swiper-slide-index") * 1 === index));
 	}
-
 	getSlideIndexWhenGrid(index) {
 		if (this.grid && this.params.grid && this.params.grid.rows > 1) {
 			if (this.params.grid.fill === "column") index = Math.floor(index / this.params.grid.rows);
@@ -3357,13 +3326,11 @@ var Swiper = class Swiper {
 		}
 		return index;
 	}
-
 	recalcSlides() {
 		const swiper = this;
 		const { slidesEl, params } = swiper;
 		swiper.slides = elementChildren(slidesEl, `.${params.slideClass}, swiper-slide`);
 	}
-
 	enable() {
 		const swiper = this;
 		if (swiper.enabled) return;
@@ -3371,7 +3338,6 @@ var Swiper = class Swiper {
 		if (swiper.params.grabCursor) swiper.setGrabCursor();
 		swiper.emit("enable");
 	}
-
 	disable() {
 		const swiper = this;
 		if (!swiper.enabled) return;
@@ -3379,7 +3345,6 @@ var Swiper = class Swiper {
 		if (swiper.params.grabCursor) swiper.unsetGrabCursor();
 		swiper.emit("disable");
 	}
-
 	setProgress(progress, speed) {
 		const swiper = this;
 		progress = Math.min(Math.max(progress, 0), 1);
@@ -3389,7 +3354,6 @@ var Swiper = class Swiper {
 		swiper.updateActiveIndex();
 		swiper.updateSlidesClasses();
 	}
-
 	emitContainerClasses() {
 		const swiper = this;
 		if (!swiper.params._emitClasses || !swiper.el) return;
@@ -3398,7 +3362,6 @@ var Swiper = class Swiper {
 		});
 		swiper.emit("_containerClasses", cls.join(" "));
 	}
-
 	getSlideClasses(slideEl) {
 		const swiper = this;
 		if (swiper.destroyed) return "";
@@ -3406,7 +3369,6 @@ var Swiper = class Swiper {
 			return className.indexOf("swiper-slide") === 0 || className.indexOf(swiper.params.slideClass) === 0;
 		}).join(" ");
 	}
-
 	emitSlidesClasses() {
 		const swiper = this;
 		if (!swiper.params._emitClasses || !swiper.el) return;
@@ -3421,7 +3383,6 @@ var Swiper = class Swiper {
 		});
 		swiper.emit("_slideClasses", updates);
 	}
-
 	slidesPerViewDynamic(view = "current", exact = false) {
 		const { params, slides, slidesGrid, slidesSizesGrid, size: swiperSize, activeIndex } = this;
 		let spv = 1;
@@ -3444,7 +3405,6 @@ var Swiper = class Swiper {
 		} else for (let i = activeIndex - 1; i >= 0; i -= 1) if (slidesGrid[activeIndex] - slidesGrid[i] < swiperSize) spv += 1;
 		return spv;
 	}
-
 	update() {
 		const swiper = this;
 		if (!swiper || swiper.destroyed) return;
@@ -3478,7 +3438,6 @@ var Swiper = class Swiper {
 		if (params.watchOverflow && snapGrid !== swiper.snapGrid) swiper.checkOverflow();
 		swiper.emit("update");
 	}
-
 	changeDirection(newDirection, needUpdate = true) {
 		const swiper = this;
 		const currentDirection = swiper.params.direction;
@@ -3496,7 +3455,6 @@ var Swiper = class Swiper {
 		if (needUpdate) swiper.update();
 		return swiper;
 	}
-
 	changeLanguageDirection(direction) {
 		const swiper = this;
 		if (swiper.rtl && direction === "rtl" || !swiper.rtl && direction === "ltr") return;
@@ -3511,7 +3469,6 @@ var Swiper = class Swiper {
 		}
 		swiper.update();
 	}
-
 	mount(element) {
 		const swiper = this;
 		if (swiper.mounted) return true;
@@ -3547,7 +3504,6 @@ var Swiper = class Swiper {
 		});
 		return true;
 	}
-
 	init(el) {
 		const swiper = this;
 		if (swiper.initialized) return swiper;
@@ -3578,7 +3534,6 @@ var Swiper = class Swiper {
 		swiper.emit("afterInit");
 		return swiper;
 	}
-
 	destroy(deleteInstance = true, cleanStyles = true) {
 		const swiper = this;
 		const { params, el, wrapperEl, slides } = swiper;
@@ -3607,6 +3562,31 @@ var Swiper = class Swiper {
 		}
 		swiper.destroyed = true;
 		return null;
+	}
+	static get extendedDefaults() {
+		return extendedDefaults;
+	}
+
+	static get defaults() {
+		return defaults;
+	}
+
+	static extendDefaults(newDefaults) {
+		extend(extendedDefaults, newDefaults);
+	}
+
+	static installModule(mod) {
+		if (!Swiper.prototype.__modules__) Swiper.prototype.__modules__ = [];
+		const modules = Swiper.prototype.__modules__;
+		if (typeof mod === "function" && modules.indexOf(mod) < 0) modules.push(mod);
+	}
+	static use(module) {
+		if (Array.isArray(module)) {
+			module.forEach((m) => Swiper.installModule(m));
+			return Swiper;
+		}
+		Swiper.installModule(module);
+		return Swiper;
 	}
 };
 Object.keys(prototypes).forEach((prototypeGroup) => {
