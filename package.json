@@ -10,7 +10,8 @@
     "dev": "vite build --watch --mode development",
     "build": "vite build --mode development",
     "prod": "vite build --mode production",
-    "lint-scss": "node _scripts/lint-scss.mjs"
+    "lint-scss": "node _scripts/lint-scss.mjs",
+    "name": "node _scripts/name.mjs"
   },
   "bin": {
     "owl-build": "./_scripts/owl-build.mjs"
