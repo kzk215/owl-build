@@ -8,6 +8,7 @@
 - `npm run build`: 開発モードでビルド
 - `npm run prod`: 本番モードでビルド
 - `npm run lint-scss`: SCSSのリンター実行
+- `npm run name -- <日本語>`: クラス命名ヘルパー（codic APIを使い、命名候補を表示）
 
 ## ディレクトリ構造 (`src/_sources`)
 
