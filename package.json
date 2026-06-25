@@ -11,7 +11,8 @@
     "build": "vite build --mode development",
     "prod": "vite build --mode production",
     "lint-scss": "node _scripts/lint-scss.mjs",
-    "name": "node _scripts/name.mjs"
+    "name": "node _scripts/name.mjs",
+    "pull-catalog": "node _scripts/pull-catalog.mjs"
   },
   "bin": {
     "owl-build": "./_scripts/owl-build.mjs"

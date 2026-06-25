@@ -45,6 +45,9 @@ const CONFIG_FILES = [
 
 const DOCKER_FILES = ['docker-compose.yml', '.env-template'];
 
+/** src/ 同期時に除外するディレクトリ名（テンプレート開発用の HTML コンポーネント集） */
+const EXCLUDE_SOURCE_DIRS = ['catalog'];
+
 // --- Utilities ---
 
 /**
@@ -227,9 +230,9 @@ async function run() {
 			}
 		}
 
-		// 5. テンプレート src/ の中身を同期
+		// 5. テンプレート src/ の中身を同期（catalog はテンプレート開発用のため除外）
 		if (fs.existsSync(templateSrcBaseDir) && templateSrcBaseDir !== srcDir) {
-			copyRecursiveSync(templateSrcBaseDir, targetSrcDir);
+			copyRecursiveSync(templateSrcBaseDir, targetSrcDir, EXCLUDE_SOURCE_DIRS);
 			console.log(`${COLORS.green}Copied${COLORS.reset} template src/ contents to ${targetSrcDir}`);
 		}
 
