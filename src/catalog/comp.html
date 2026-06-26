@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<title>Component Catalog | owl-build</title>
+	<link as="image" crossorigin href="../assets/icons/icons.svg" rel="preload" type="image/svg+xml">
+	<link href="https://fonts.googleapis.com" rel="preconnect">
+	<link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+	<link href="../assets/css/app.css?ver=1.0" rel="stylesheet">
+	<style>
+		*, *::before, *::after { box-sizing: border-box; }
+		body.comp-page {
+			margin: 0;
+			background: #f2f6f9;
+			color: #343434;
+			font-family: "Zen Kaku Gothic New", "Noto Sans JP", sans-serif;
+		}
+		.comp-layout {
+			display: flex;
+			min-height: 100vh;
+		}
+		.comp-sidebar {
+			width: 280px;
+			flex-shrink: 0;
+			background: #093f7a;
+			color: #fff;
+			display: flex;
+			flex-direction: column;
+			position: sticky;
+			top: 0;
+			height: 100vh;
+			overflow: hidden;
+		}
+		.comp-sidebar__head {
+			padding: 20px;
+			border-bottom: 1px solid rgba(255,255,255,.15);
+		}
+		.comp-sidebar__title {
+			margin: 0 0 4px;
+			font-size: 1.8rem;
+			font-weight: 700;
+		}
+		.comp-sidebar__sub {
+			margin: 0;
+			font-size: 1.2rem;
+			opacity: .75;
+		}
+		.comp-sidebar__search {
+			margin-top: 12px;
+			width: 100%;
+			padding: 8px 12px;
+			border: 1px solid rgba(255,255,255,.25);
+			border-radius: 6px;
+			background: rgba(255,255,255,.08);
+			color: #fff;
+			font-size: 1.3rem;
+		}
+		.comp-sidebar__search::placeholder { color: rgba(255,255,255,.5); }
+		.comp-sidebar__nav {
+			flex: 1;
+			overflow-y: auto;
+			padding: 8px 0 24px;
+		}
+		.comp-sidebar__section {
+			border-bottom: 1px solid rgba(255,255,255,.15);
+		}
+		.comp-sidebar__sectionBtn {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			padding: 14px 16px;
+			background: rgba(255,255,255,.04);
+			border: none;
+			color: #fff;
+			font-size: 1.4rem;
+			font-weight: 700;
+			cursor: pointer;
+			text-align: left;
+			transition: background .2s;
+		}
+		.comp-sidebar__sectionBtn:hover {
+			background: rgba(255,255,255,.08);
+		}
+		.comp-sidebar__sectionBody {
+			display: none;
+		}
+		.comp-sidebar__section.is-open .comp-sidebar__sectionBody {
+			display: block;
+		}
+		.comp-sidebar__section.is-open .comp-sidebar__sectionBtn .comp-sidebar__categoryIcon {
+			transform: rotate(45deg);
+		}
+		.comp-sidebar__category {
+			border-bottom: 1px solid rgba(255,255,255,.08);
+		}
+		.comp-sidebar__categoryBtn {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			padding: 10px 16px 10px 24px;
+			background: none;
+			border: none;
+			color: #fff;
+			font-size: 1.25rem;
+			font-weight: 600;
+			cursor: pointer;
+			text-align: left;
+			transition: background .2s;
+		}
+		.comp-sidebar__categoryBtn:hover {
+			background: rgba(255,255,255,.06);
+		}
+		.comp-sidebar__categoryLabel {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			min-width: 0;
+		}
+		.comp-sidebar__categoryName {
+			font-size: 1.3rem;
+		}
+		.comp-sidebar__categoryPath {
+			font-size: 1.1rem;
+			font-weight: 400;
+			opacity: .55;
+			font-family: monospace;
+		}
+		.comp-sidebar__categoryIcon {
+			flex-shrink: 0;
+			width: 8px;
+			height: 8px;
+			border-right: 2px solid rgba(255,255,255,.65);
+			border-bottom: 2px solid rgba(255,255,255,.65);
+			transform: rotate(-45deg);
+			transition: transform .2s;
+		}
+		.comp-sidebar__category.is-open .comp-sidebar__categoryIcon {
+			transform: rotate(45deg);
+		}
+		.comp-sidebar__categoryBody {
+			display: none;
+			padding-bottom: 6px;
+		}
+		.comp-sidebar__category.is-open .comp-sidebar__categoryBody {
+			display: block;
+		}
+		.comp-sidebar__link {
+			display: block;
+			padding: 7px 16px 7px 36px;
+			color: rgba(255,255,255,.85);
+			text-decoration: none;
+			font-size: 1.2rem;
+			border-left: 3px solid transparent;
+			transition: background .2s, border-color .2s;
+		}
+		.comp-sidebar__link:hover {
+			background: rgba(255,255,255,.08);
+			opacity: 1;
+		}
+		.comp-sidebar__link.is-active {
+			background: rgba(255,255,255,.12);
+			border-left-color: #04ace9;
+			color: #fff;
+			font-weight: 500;
+		}
+		.comp-main {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+		}
+		.comp-main__header {
+			padding: 24px 32px 16px;
+			background: #fff;
+			border-bottom: 1px solid #d8ebfd;
+		}
+		.comp-main__title {
+			margin: 0 0 4px;
+			font-size: 2.4rem;
+			font-weight: 700;
+			color: #093f7a;
+		}
+		.comp-main__path {
+			margin: 0;
+			font-size: 1.2rem;
+			color: #8090ac;
+			font-family: monospace;
+		}
+		.comp-main__preview {
+			flex: 1;
+			padding: 32px;
+			overflow: auto;
+		}
+		.comp-main__preview .comp-demo {
+			background: #fff;
+			border-radius: 10px;
+			border: 1px solid #d8ebfd;
+			overflow: hidden;
+		}
+		.comp-demo__label {
+			margin: 0;
+			padding: 12px 20px;
+			font-size: 1.2rem;
+			font-weight: 600;
+			background: #eef5fe;
+			border-bottom: 1px solid #d8ebfd;
+			color: #2d83e2;
+			font-family: monospace;
+		}
+		.comp-demo > :not(.comp-demo__label) {
+			padding: 24px 0;
+		}
+		.comp-loading, .comp-error {
+			padding: 40px;
+			text-align: center;
+			color: #8090ac;
+			font-size: 1.6rem;
+		}
+		.comp-error { color: #d64b57; }
+		@media (max-width: 768px) {
+			.comp-layout { flex-direction: column; }
+			.comp-sidebar {
+				width: 100%;
+				height: auto;
+				max-height: 40vh;
+				position: relative;
+			}
+			.comp-main__header { padding: 16px 20px 12px; }
+			.comp-main__preview { padding: 16px; }
+		}
+	</style>
+</head>
+<body class="comp-page">
+    <div class="comp-layout">
+        <aside class="comp-sidebar">
+            <div class="comp-sidebar__head">
+                <h1 class="comp-sidebar__title">ComponentBook</h1>
+                <p class="comp-sidebar__sub">SCSS component catalog</p>
+                <input class="comp-sidebar__search" id="compSearch" placeholder="コンポーネントを検索..." type="search">
+            </div>
+            <nav class="comp-sidebar__nav" id="compNav" aria-label="コンポーネント一覧"></nav>
+        </aside>
+        <main class="comp-main">
+            <header class="comp-main__header">
+                <h2 class="comp-main__title" id="compTitle">コンポーネントを選択</h2>
+                <p class="comp-main__path" id="compPath">左のサイドバーから選択してください</p>
+            </header>
+            <div class="comp-main__preview" id="compPreview">
+                <p class="comp-loading">← 左のリストからコンポーネントを選んでください</p>
+            </div>
+        </main>
+    </div>
+    <script>
+    (() => {
+        const BASE = 'component/';
+
+        const COMPONENT_SECTION = {
+            id: 'component',
+            label: 'Component',
+            path: 'component/',
+        };
+
+        const CATEGORIES = [
+            {
+                id: 'btn',
+                label: 'Button',
+                path: 'btn/',
+                items: [
+                    { id: 'btn', name: 'c-btn', file: 'btn/btn.html' },
+                    { id: 'btnLine', name: 'c-btnLine', file: 'btn/btnLine.html' },
+                    { id: 'btnReset', name: 'c-btnReset', file: 'btn/btnReset.html' },
+                    { id: 'btnSquare', name: 'c-btnSquare', file: 'btn/btnSquare.html' },
+                ],
+            },
+            {
+                id: 'card',
+                label: 'Card',
+                path: 'card/',
+                items: [
+                    { id: 'card', name: 'c-card', file: 'card/card.html' },
+                    { id: 'cardMid', name: 'c-cardMid', file: 'card/cardMid.html' },
+                    { id: 'cardSmall', name: 'c-cardSmall', file: 'card/cardSmall.html' },
+                    { id: 'cardBtn', name: 'c-cardBtn', file: 'card/cardBtn.html' },
+                ],
+            },
+            {
+                id: 'form',
+                label: 'Form',
+                path: 'form/',
+                items: [
+                    { id: 'checkbox', name: 'c-checkbox', file: 'form/checkbox.html' },
+                ],
+            },
+            {
+                id: 'overlay',
+                label: 'Overlay',
+                path: 'overlay/',
+                items: [
+                    { id: 'overlay', name: 'c-overlay', file: 'overlay/overlay.html' },
+                    { id: 'asideOverlay', name: 'c-asideOverlay', file: 'overlay/asideOverlay.html' },
+                ],
+            },
+            {
+                id: 'text',
+                label: 'Text',
+                path: 'text/',
+                items: [
+                    { id: 'text', name: 'c-text', file: 'text/text.html' },
+                    { id: 'textLead', name: 'c-textLead', file: 'text/textLead.html' },
+                    { id: 'textLink', name: 'c-textLink', file: 'text/textLink.html' },
+                    { id: 'textMarker', name: 'c-textMarker', file: 'text/textMarker.html' },
+                ],
+            },
+            {
+                id: 'title',
+                label: 'Title',
+                path: 'title/',
+                items: [
+                    { id: 'title', name: 'c-title', file: 'title/title.html' },
+                    { id: 'titleCenter', name: 'c-titleCenter', file: 'title/titleCenter.html' },
+                    { id: 'titleLine', name: 'c-titleLine', file: 'title/titleLine.html' },
+                    { id: 'titleMid', name: 'c-titleMid', file: 'title/titleMid.html' },
+                    { id: 'titleSm', name: 'c-titleSm', file: 'title/titleSm.html' },
+                ],
+            },
+            {
+                id: 'root',
+                label: 'Common',
+                path: '(root)/',
+                items: [
+                    { id: 'breadcrumb', name: 'c-breadcrumb', file: 'breadcrumb.html' },
+                    { id: 'caution', name: 'c-caution', file: 'caution.html' },
+                    { id: 'container', name: 'c-container', file: 'container.html' },
+                    { id: 'contents', name: 'c-contents', file: 'contents.html' },
+                    { id: 'ctaItem', name: 'c-ctaItem', file: 'ctaItem.html' },
+                    { id: 'curveBg', name: 'c-curveBg', file: 'curveBg.html' },
+                    { id: 'edit', name: 'c-edit', file: 'edit.html' },
+                    { id: 'inner', name: 'c-inner', file: 'inner.html' },
+                    { id: 'lead', name: 'c-lead', file: 'lead.html' },
+                    { id: 'marker', name: 'c-marker', file: 'marker.html' },
+                    { id: 'pager', name: 'c-pager', file: 'pager.html' },
+                    { id: 'product', name: 'c-product', file: 'product.html' },
+                    { id: 'refineSearch', name: 'c-refineSearch', file: 'refineSearch.html' },
+                    { id: 'scroll', name: 'c-scroll', file: 'scroll.html' },
+                    { id: 'status', name: 'c-status', file: 'status.html' },
+                    { id: 'table', name: 'c-table', file: 'table.html' },
+                    { id: 'textRoot', name: 'c-text (root)', file: 'text.html' },
+                    { id: 'textLinkRoot', name: 'c-textLink (root)', file: 'textLink.html' },
+                    { id: 'zoomPicture', name: 'c-zoomPicture', file: 'zoomPicture.html' },
+                ],
+            },
+        ];
+
+        const navEl = document.getElementById('compNav');
+        const previewEl = document.getElementById('compPreview');
+        const titleEl = document.getElementById('compTitle');
+        const pathEl = document.getElementById('compPath');
+        const searchEl = document.getElementById('compSearch');
+
+        const flatItems = CATEGORIES.flatMap(cat =>
+            cat.items.map(item => ({ ...item, categoryId: cat.id, categoryLabel: cat.label }))
+        );
+        let activeId = null;
+        let openSection = new Set(['component']);
+        let openCategories = new Set(['btn']);
+
+        function getCategoryForItem(id) {
+            return CATEGORIES.find(cat => cat.items.some(item => item.id === id))?.id ?? null;
+        }
+
+        function buildNav(filter = '') {
+            const q = filter.trim().toLowerCase();
+            navEl.innerHTML = '';
+
+            const visibleCategories = CATEGORIES.map(category => ({
+                category,
+                items: category.items.filter(item =>
+                    !q ||
+                    item.name.toLowerCase().includes(q) ||
+                    item.id.toLowerCase().includes(q) ||
+                    item.file.toLowerCase().includes(q) ||
+                    category.label.toLowerCase().includes(q)
+                ),
+            })).filter(entry => entry.items.length);
+
+            if (!visibleCategories.length) return;
+
+            const sectionOpen = q ? true : openSection.has(COMPONENT_SECTION.id);
+            const section = document.createElement('div');
+            section.className = 'comp-sidebar__section' + (sectionOpen ? ' is-open' : '');
+
+            const sectionBtn = document.createElement('button');
+            sectionBtn.type = 'button';
+            sectionBtn.className = 'comp-sidebar__sectionBtn';
+            sectionBtn.innerHTML = `
+                <span class="comp-sidebar__categoryLabel">
+                    <span class="comp-sidebar__categoryName">${COMPONENT_SECTION.label}</span>
+                    <span class="comp-sidebar__categoryPath">${COMPONENT_SECTION.path}</span>
+                </span>
+                <span class="comp-sidebar__categoryIcon" aria-hidden="true"></span>
+            `;
+            sectionBtn.addEventListener('click', () => {
+                if (openSection.has(COMPONENT_SECTION.id)) {
+                    openSection.delete(COMPONENT_SECTION.id);
+                } else {
+                    openSection.add(COMPONENT_SECTION.id);
+                }
+                buildNav(searchEl.value);
+            });
+
+            const sectionBody = document.createElement('div');
+            sectionBody.className = 'comp-sidebar__sectionBody';
+
+            visibleCategories.forEach(({ category, items }) => {
+                const isOpen = q ? true : openCategories.has(category.id);
+                const catSection = document.createElement('div');
+                catSection.className = 'comp-sidebar__category' + (isOpen ? ' is-open' : '');
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'comp-sidebar__categoryBtn';
+                btn.innerHTML = `
+                    <span class="comp-sidebar__categoryLabel">
+                        <span class="comp-sidebar__categoryName">${category.label}</span>
+                        <span class="comp-sidebar__categoryPath">${category.path}</span>
+                    </span>
+                    <span class="comp-sidebar__categoryIcon" aria-hidden="true"></span>
+                `;
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (openCategories.has(category.id)) {
+                        openCategories.delete(category.id);
+                    } else {
+                        openCategories.add(category.id);
+                    }
+                    openSection.add(COMPONENT_SECTION.id);
+                    buildNav(searchEl.value);
+                });
+
+                const body = document.createElement('div');
+                body.className = 'comp-sidebar__categoryBody';
+
+                items.forEach(item => {
+                    const link = document.createElement('a');
+                    link.href = `#${item.id}`;
+                    link.className = 'comp-sidebar__link' + (item.id === activeId ? ' is-active' : '');
+                    link.textContent = item.name;
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        loadComponent(item.id);
+                    });
+                    body.appendChild(link);
+                });
+
+                catSection.appendChild(btn);
+                catSection.appendChild(body);
+                sectionBody.appendChild(catSection);
+            });
+
+            section.appendChild(sectionBtn);
+            section.appendChild(sectionBody);
+            navEl.appendChild(section);
+        }
+
+        function reinitInteractive(root) {
+            root.querySelectorAll('.c-refineSearch__title').forEach(el => {
+                el.addEventListener('click', () => el.classList.toggle('js-toggle'));
+            });
+
+            const refineSearchEl = root.querySelector('.c-refineSearch');
+            if (refineSearchEl) {
+                const checkboxes = refineSearchEl.querySelectorAll('.c-checkbox');
+                const submitBtn = refineSearchEl.querySelector('.c-btnSquare.--submit');
+                const clearBtn = refineSearchEl.querySelector('#refineClear');
+
+                const toggleSubmitBtn = () => {
+                    if (!submitBtn) return;
+                    const hasChecked = Array.from(checkboxes).some(el => el.checked);
+                    submitBtn.classList.toggle('--hidden', !hasChecked);
+                };
+
+                toggleSubmitBtn();
+                checkboxes.forEach(el => el.addEventListener('change', toggleSubmitBtn));
+                clearBtn?.addEventListener('click', () => {
+                    checkboxes.forEach(el => { el.checked = false; });
+                    toggleSubmitBtn();
+                });
+            }
+        }
+
+        async function loadComponent(id) {
+            const item = flatItems.find(i => i.id === id);
+            if (!item) return;
+
+            activeId = id;
+            const categoryId = getCategoryForItem(id);
+            if (categoryId) openCategories.add(categoryId);
+            openSection.add(COMPONENT_SECTION.id);
+            buildNav(searchEl.value);
+            titleEl.textContent = item.name;
+            pathEl.textContent = BASE + item.file;
+            previewEl.innerHTML = '<p class="comp-loading">読み込み中...</p>';
+            history.replaceState(null, '', `#${id}`);
+
+            try {
+                const res = await fetch(BASE + item.file);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const html = await res.text();
+                previewEl.innerHTML = html;
+                reinitInteractive(previewEl);
+            } catch (err) {
+                previewEl.innerHTML = `<p class="comp-error">読み込みに失敗しました: ${err.message}<br><small>ローカルサーバー（Docker / Live Server 等）経由で開いてください。</small></p>`;
+            }
+        }
+
+        searchEl.addEventListener('input', () => buildNav(searchEl.value));
+
+        buildNav();
+
+        const hash = location.hash.slice(1);
+        if (hash && flatItems.some(i => i.id === hash)) {
+            loadComponent(hash);
+        }
+    })();
+    </script>
+</body>
+</html>

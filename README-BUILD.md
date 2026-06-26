@@ -9,6 +9,7 @@
 - `npm run prod`: 本番モードでビルド
 - `npm run lint-scss`: SCSSのリンター実行
 - `npm run name -- <日本語>`: クラス命名ヘルパー（codic APIを使い、命名候補を表示）
+- `npm run pull-catalog`: HTMLコンポーネント集（`src/catalog`）をテンプレートから任意取得
 
 ## ディレクトリ構造 (`src/_sources`)
 
@@ -37,6 +38,13 @@ FLOCSSをベースにした設計思想で構成されています。
 - `page/`: ページごとの固有スタイル。
 - `block/`: WordPressブロックに関連するスタイル。
 - `_utility/`: 単一機能のヘルパークラス（マージン、パディングなど）。
+
+### HTMLコンポーネント集 (`src/catalog`)
+
+初期セットアップでは含まれません。必要なときだけ `npm run pull-catalog` でテンプレートから取得してください。
+
+- `comp.html`: コンポーネント一覧・参照用
+- `component/`: ボタン、カードなどの HTML パーツ
 
 ## コーディングルール
 

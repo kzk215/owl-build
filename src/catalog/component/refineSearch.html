@@ -1,0 +1,28 @@
+<section class="comp-demo">
+	<h2 class="comp-demo__label">c-refineSearch</h2>
+	<div class="c-inner">
+		<form class="c-refineSearch" action="#" method="get">
+			<h3 class="c-refineSearch__title js-toggle">条件で絞り込む<span class="c-refineSearch__icon"></span></h3>
+			<div class="c-refineSearch__box">
+				<dl class="c-refineSearch__dl">
+					<dt class="c-refineSearch__dt">カテゴリ</dt>
+					<dd class="c-refineSearch__dd">
+						<span><input checked class="c-checkbox" id="refine-cat1" name="cat[]" type="checkbox" value="1"><label for="refine-cat1">カテゴリA</label></span>
+						<span><input class="c-checkbox" id="refine-cat2" name="cat[]" type="checkbox" value="2"><label for="refine-cat2">カテゴリB</label></span>
+					</dd>
+				</dl>
+				<dl class="c-refineSearch__dl">
+					<dt class="c-refineSearch__dt">タグ</dt>
+					<dd class="c-refineSearch__dd">
+						<span><input class="c-checkbox" id="refine-tag1" name="tag[]" type="checkbox" value="1"><label for="refine-tag1">タグA</label></span>
+						<span><input class="c-checkbox" id="refine-tag2" name="tag[]" type="checkbox" value="2"><label for="refine-tag2">タグB</label></span>
+					</dd>
+				</dl>
+				<div class="c-refineSearch__btnBox">
+					<button class="c-btnReset" id="refineClear" type="button">条件をリセット</button>
+					<button class="c-btnSquare --submit c-refineSearch__btn" type="submit">この条件で検索</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
