@@ -81,6 +81,12 @@ export default defineConfig(({mode}) => {
 			generateSassSourcemap()
 		],
 
+		server: {
+			port: 3000,
+			host: true,
+			open: true,
+		},
+
 		css: {
 			preprocessorOptions: {scss: {api: "modern-compiler"}},
 			postcss: {plugins: postcssPlugins},

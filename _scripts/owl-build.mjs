@@ -169,11 +169,16 @@ async function run() {
 	let templateDir = '';
 	let isTempDir = false;
 
+	// カレントディレクトリが owl-build 自体のリポジトリであるかチェック
+	const isDevelopmentEnv = fs.existsSync(path.join(rootDir, 'paths.mjs')) && 
+	                         fs.existsSync(path.join(rootDir, 'vite.config.mjs')) &&
+	                         fs.existsSync(path.join(rootDir, '_scripts', 'owl-build.mjs'));
+
 	try {
 		// 1. テンプレートソースの準備
-		if (useLocal) {
+		if (useLocal || isDevelopmentEnv) {
 			console.log(`${COLORS.cyan}Mode: Local${COLORS.reset}`);
-			templateDir = path.resolve(__dirname, '..');
+			templateDir = useLocal ? path.resolve(__dirname, '..') : rootDir;
 		} else {
 			console.log(`${COLORS.cyan}Mode: Remote${COLORS.reset}`);
 			templateDir = path.join(rootDir, '.owl-build-temp');
@@ -202,11 +207,22 @@ async function run() {
 		for (const file of CONFIG_FILES) {
 			const srcPath = path.join(templateDir, file);
 			const destPath = path.join(rootDir, file);
+			
+			// 開発用ファイルはコピー対象外（プロジェクト配布時には含めない）
+			if (file === 'docker-compose.local.yml') continue;
+
+			// 開発環境自体の場合は、設定ファイルの上書きを避ける（paths.mjs 等のテーマ名書き換えは除く）
+			if (isDevelopmentEnv && file !== 'paths.mjs') continue;
+
 			if (srcPath !== destPath && fs.existsSync(srcPath)) {
 				if (file === 'paths.mjs' && isWpMode) {
+					// 開発環境自体の場合はバックアップをとるか、あるいは慎重に上書き
+					if (isDevelopmentEnv) {
+						console.log(`${COLORS.yellow}Updating paths.mjs in development environment...${COLORS.reset}`);
+					}
 					fs.copyFileSync(srcPath, destPath);
 					updatePathsMjs(destPath, themeName);
-					console.log(`${COLORS.green}Created${COLORS.reset} paths.mjs with theme path: src/${themeName}`);
+					console.log(`${COLORS.green}${isDevelopmentEnv ? 'Updated' : 'Created'}${COLORS.reset} paths.mjs with theme path: src/${themeName}`);
 				} else {
 					copyRecursiveSync(srcPath, destPath);
 					console.log(`${COLORS.green}Copied${COLORS.reset} ${file} to project root`);
@@ -220,6 +236,13 @@ async function run() {
 			if (fs.existsSync(srcPath)) {
 				const destName = (file === '.env-template') ? '.env' : file;
 				const destPath = path.join(rootDir, destName);
+
+				// 開発環境自体の場合は、既存の Docker ファイルを壊さないようにする
+				if (isDevelopmentEnv && fs.existsSync(destPath)) {
+					console.log(`${COLORS.yellow}Skipped copying ${file} as it already exists in dev env.${COLORS.reset}`);
+					continue;
+				}
+
 				if (file === '.env-template') {
 					setupEnvFile(srcPath, destPath, themeName, isHtmlMode);
 					console.log(`${COLORS.green}Created${COLORS.reset} .env and set THEME_NAME`);
@@ -238,7 +261,7 @@ async function run() {
 
 		// 6. ローカルの wp/ or html/ ディレクトリがある場合の追加同期
 		const localSourceDir = path.join(rootDir, isHtmlMode ? 'html' : 'wp');
-		if (fs.existsSync(localSourceDir)) {
+		if (fs.existsSync(localSourceDir) && localSourceDir !== sourceContentDir) {
 			console.log(`Syncing local ${isHtmlMode ? 'html/' : 'wp/'} directory...`);
 			copyRecursiveSync(localSourceDir, targetSrcDir, ['docker', 'docker-compose.yml', '.env-template']);
 		}

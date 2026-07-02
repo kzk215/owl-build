@@ -1,4 +1,4 @@
-//#region src/coplanauts/_sources/_js/class/InViewObserver.js
+//#region src/_sources/_js/class/InViewObserver.js
 /**
 * InViewObserver クラス
 * ビューポート内に要素が入ったときにクラスを付与するオブザーバー
@@ -78,9 +78,12 @@ var InViewObserver = class {
 		} else {
 			this.pending = new Set(this.targets);
 			this.check = () => {
-				for (const el of Array.from(this.pending)) if (isInViewportForEnter(el.getBoundingClientRect())) {
-					this.addState(el);
-					this.pending.delete(el);
+				for (const el of Array.from(this.pending)) {
+					const rect = el.getBoundingClientRect();
+					if (isInViewportForEnter(rect)) {
+						this.addState(el);
+						this.pending.delete(el);
+					}
 				}
 				if (this.pending.size === 0) this.destroy();
 			};
@@ -115,7 +118,7 @@ var InViewObserver = class {
 	}
 };
 //#endregion
-//#region src/coplanauts/_sources/_js/class/PostIndex.js
+//#region src/_sources/_js/class/PostIndex.js
 /**
 * PostIndex
 * - 指定範囲内の h2/h3 から目次を自動生成
@@ -264,7 +267,7 @@ var PostIndex = class {
 	}
 };
 //#endregion
-//#region src/coplanauts/_sources/_js/class/Modal.js
+//#region src/_sources/_js/class/Modal.js
 var Modal = class Modal {
 	static DEFAULTS = {
 		mode: "gallery",
@@ -765,7 +768,8 @@ function animateCSSModeScroll({ swiper, targetPosition, side }) {
 		time = (/* @__PURE__ */ new Date()).getTime();
 		if (startTime === null) startTime = time;
 		const progress = Math.max(Math.min((time - startTime) / duration, 1), 0);
-		let currentPosition = startPosition + (.5 - Math.cos(progress * Math.PI) / 2) * (targetPosition - startPosition);
+		const easeProgress = .5 - Math.cos(progress * Math.PI) / 2;
+		let currentPosition = startPosition + easeProgress * (targetPosition - startPosition);
 		if (isOutOfBound(currentPosition, targetPosition)) currentPosition = targetPosition;
 		swiper.wrapperEl.scrollTo({ [side]: currentPosition });
 		if (isOutOfBound(currentPosition, targetPosition)) {
@@ -2983,10 +2987,13 @@ function getBreakpoint(breakpoints, base = "window", containerEl) {
 	const window = getWindow();
 	const currentHeight = base === "window" ? window.innerHeight : containerEl.clientHeight;
 	const points = Object.keys(breakpoints).map((point) => {
-		if (typeof point === "string" && point.indexOf("@") === 0) return {
-			value: currentHeight * parseFloat(point.substr(1)),
-			point
-		};
+		if (typeof point === "string" && point.indexOf("@") === 0) {
+			const minRatio = parseFloat(point.substr(1));
+			return {
+				value: currentHeight * minRatio,
+				point
+			};
+		}
 		return {
 			value: point,
 			point
@@ -3563,18 +3570,15 @@ var Swiper = class Swiper {
 		swiper.destroyed = true;
 		return null;
 	}
-	static get extendedDefaults() {
-		return extendedDefaults;
-	}
-
-	static get defaults() {
-		return defaults;
-	}
-
 	static extendDefaults(newDefaults) {
 		extend(extendedDefaults, newDefaults);
 	}
-
+	static get extendedDefaults() {
+		return extendedDefaults;
+	}
+	static get defaults() {
+		return defaults;
+	}
 	static installModule(mod) {
 		if (!Swiper.prototype.__modules__) Swiper.prototype.__modules__ = [];
 		const modules = Swiper.prototype.__modules__;
@@ -3596,7 +3600,7 @@ Object.keys(prototypes).forEach((prototypeGroup) => {
 });
 Swiper.use([Resize, Observer]);
 //#endregion
-//#region src/coplanauts/_sources/_js/modules/aside.js
+//#region src/_sources/_js/modules/aside.js
 /**
 * aside周りの関数
 */
@@ -3631,7 +3635,8 @@ function aside() {
 	btns.forEach((btn) => {
 		btn.addEventListener("click", () => {
 			const modifier = Array.from(btn.classList).find((c) => c.startsWith("--"));
-			openModal(modifier ? modifier.replace(/^--/, "") : "");
+			const key = modifier ? modifier.replace(/^--/, "") : "";
+			openModal(key);
 		});
 	});
 	if (overlay) overlay.addEventListener("click", closeAll);
@@ -3676,7 +3681,7 @@ function aside() {
 	}
 }
 //#endregion
-//#region src/coplanauts/_sources/_js/modules/smoothScroll.js
+//#region src/_sources/_js/modules/smoothScroll.js
 /**
 * smoothScroll
 * @param options
@@ -3779,7 +3784,7 @@ function smoothScroll(options = {}) {
 	});
 }
 //#endregion
-//#region src/coplanauts/_sources/_js/modules/globalMenuToggle.js
+//#region src/_sources/_js/modules/globalMenuToggle.js
 /**
 * globalMenu
 */
@@ -3816,7 +3821,7 @@ function globalMenuToggle() {
 	});
 }
 //#endregion
-//#region src/coplanauts/_sources/_js/modules/toggleClass.js
+//#region src/_sources/_js/modules/toggleClass.js
 /**
 * toggleClass
 * @param {Array} configs - 設定の配列 [{selector, className}, ...]
@@ -3833,7 +3838,7 @@ function toggleClass(configs) {
 	});
 }
 //#endregion
-//#region src/coplanauts/_sources/_js/modules/headerScroll.js
+//#region src/_sources/_js/modules/headerScroll.js
 /**
 * headerScroll
 * @param {number} scrollAmount - スクロール量のしきい値
@@ -3857,7 +3862,7 @@ function headerScroll(scrollAmount, selector = ".l-header", className = "js-scro
 	});
 }
 //#endregion
-//#region src/coplanauts/_sources/_js/modules/refineSearch.js
+//#region src/_sources/_js/modules/refineSearch.js
 /**
 * refineSearch
 *
@@ -3884,7 +3889,7 @@ function refineSearch() {
 	});
 }
 //#endregion
-//#region src/coplanauts/_sources/_js/app.js
+//#region src/_sources/_js/app.js
 /**
 * 発火層
 */
